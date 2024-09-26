@@ -8,4 +8,4 @@ pod 'RobokassaSDK', :git => 'https://github.com/madjios/RobokassaSDK.git', :tag 
 
 SPM:
 
-
+https://github.com/madjios/RobokassaSDK.git
