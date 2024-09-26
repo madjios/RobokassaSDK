@@ -16,6 +16,7 @@ Pod::Spec.new do |spec|
   spec.author         = { 'Majit U.' => 'majit.ios.dev@icloud.com' }
   spec.platform       = :ios, '14.0'
   spec.source         = { :git => 'https://github.com/madjios/RobokassaSDK.git', :tag => spec.version }
+  spec.ios.deployment_target = '11.0'
   spec.source_files   = 'Robokassa/**/*.{swift}'
   spec.swift_versions = '5.0'
   

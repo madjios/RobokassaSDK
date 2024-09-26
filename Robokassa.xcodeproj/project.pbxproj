@@ -8,13 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		75B3A6342CA52B29007C9098 /* Robokassa.h in Headers */ = {isa = PBXBuildFile; fileRef = 75B3A6332CA52B29007C9098 /* Robokassa.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		75B3A63B2CA52B46007C9098 /* Builder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B3A63A2CA52B46007C9098 /* Builder.swift */; };
+		75B3A63B2CA52B46007C9098 /* Starter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B3A63A2CA52B46007C9098 /* Starter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		75B3A6302CA52B29007C9098 /* Robokassa.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Robokassa.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		75B3A6332CA52B29007C9098 /* Robokassa.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Robokassa.h; sourceTree = "<group>"; };
-		75B3A63A2CA52B46007C9098 /* Builder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Builder.swift; sourceTree = "<group>"; };
+		75B3A63A2CA52B46007C9098 /* Starter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Starter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,7 +48,7 @@
 			isa = PBXGroup;
 			children = (
 				75B3A6332CA52B29007C9098 /* Robokassa.h */,
-				75B3A63A2CA52B46007C9098 /* Builder.swift */,
+				75B3A63A2CA52B46007C9098 /* Starter.swift */,
 			);
 			path = Robokassa;
 			sourceTree = "<group>";
@@ -133,7 +133,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				75B3A63B2CA52B46007C9098 /* Builder.swift in Sources */,
+				75B3A63B2CA52B46007C9098 /* Starter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
