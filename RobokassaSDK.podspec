@@ -11,11 +11,11 @@ Pod::Spec.new do |spec|
   spec.version        = '1.0.0'
   spec.summary        = 'Robokassa iOS SDK'
   spec.description    = 'This is the Robokassa iOS SDK'
-  spec.homepage       = 'https://gitlab.itfactory.site/ipol/opol_ios'
+  spec.homepage       = 'https://github.com/madjios/RobokassaSDK'
   spec.license        = 'MIT'
-  spec.author         = { 'madjios' => 'majit.ios.dev@icloud.com' }
+  spec.author         = { 'Majit U.' => 'majit.ios.dev@icloud.com' }
   spec.platform       = :ios, '14.0'
-  spec.source         = { :git => 'https://gitlab.itfactory.site/ipol/opol_ios.git', :tag => spec.version.to_s }
+  spec.source         = { :git => 'https://github.com/madjios/RobokassaSDK.git', :tag => spec.version }
   spec.source_files   = 'Robokassa/**/*.{swift}'
   spec.swift_versions = '5.0'
   
