@@ -7,19 +7,17 @@ class WebViewController: UIViewController {
     
     private var webView: WKWebView!
     
-    private(set) var params: PaymentParams
-    private(set) var method: HTTPMethod
-    private(set) var urlPath: String
+    private(set) var invoiceId: String
+    private(set) var paymentType: PaymentType
     private(set) var isTesting: Bool
     
     var onDismissHandler: (() -> Void)?
     
     // MARK: - Init -
     
-    init(params: PaymentParams, method: HTTPMethod = .post, urlPath: String = Constants.URLs.main, isTesting: Bool = false) {
-        self.params = params
-        self.method = method
-        self.urlPath = urlPath
+    init(invoiceId: String, paymentType: PaymentType, isTesting: Bool = false) {
+        self.invoiceId = invoiceId
+        self.paymentType = paymentType
         self.isTesting = isTesting
         
         super.init(nibName: nil, bundle: nil)
@@ -34,60 +32,27 @@ class WebViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.backButtonTitle = " "
         view.backgroundColor = .white
+        
+        let contentController = WKUserContentController()
+        contentController.add(self, name: "callbackHandler")
         
         let preferences = WKWebpagePreferences()
         preferences.allowsContentJavaScript = true
+        
         let config = WKWebViewConfiguration()
-//        config.userContentController = contentController
         config.defaultWebpagePreferences = preferences
+        config.userContentController = contentController
         
         webView = WKWebView(frame: .zero, configuration: config)
         webView.translatesAutoresizingMaskIntoConstraints = false
         webView.navigationDelegate = self
-        configureWebSettings()
         
+        configureWebSettings()
         configureBackButton()
         embedSubviews()
         setSubviewsConstraints()
-        
-        if let url = URL(string: urlPath) {
-            let urlParams = params.payPostParams(isTest: isTesting)
-            
-            let script = """
-                    fetch('\(Constants.URLs.main)', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded'
-                        },
-                        body: '\(urlParams)'
-                    })
-                    .then(response => response.json())
-                    .then(data => console.log(data))
-                    .catch(error => console.error('Error:', error));
-                    """
-            
-            // Выполнение скрипта после загрузки страницы
-            webView.loadHTMLString("<html><body></body></html>", baseURL: nil)
-            webView.evaluateJavaScript(script, completionHandler: nil)
-            
-            var request = URLRequest(url: url)
-            request.httpMethod = method.rawValue
-            request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-            
-            if let postData = urlParams.data(using: .utf8)/*?.base64EncodedData()*/ {
-                let query = String(data: postData, encoding: .utf8) ?? ""
-                
-                var urlComponent = URLComponents(string: urlPath)
-                urlComponent?.query = query
-                
-                request.url = urlComponent?.url
-                request.httpBody = postData
-            }
-            
-            webView.load(request)
-        }
+        loadWebView()
     }
 
 }
@@ -107,13 +72,9 @@ extension WebViewController: WKNavigationDelegate {
                 do {
                     if let object = try JSONSerialization.jsonObject(with: jsonData) as? [String: Any] {
                         let data = try JSONSerialization.data(withJSONObject: object, options: .prettyPrinted)
-                        let mappedObject = try JSONDecoder().decode(Invoce.self, from: data)
-                        
-                        if let url = URL(string: "https://auth.robokassa.ru/Merchant/Index/" + mappedObject.invoiceID) {
-                            var request = URLRequest(url: url)
-                            request.httpMethod = "POST"
-                            webView.load(request)
-                        }
+                        let stringData = String(data: data, encoding: .utf8) ?? ""
+                        print(stringData)
+//                        let mappedObject = try JSONDecoder().decode(Invoce.self, from: data)
                     }
                 } catch {
                     print(error.localizedDescription)
@@ -124,6 +85,20 @@ extension WebViewController: WKNavigationDelegate {
         }
     }
 }
+
+// MARK: - WebView Script Message Handler -
+
+extension WebViewController: WKScriptMessageHandler {
+    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+        if message.name == "callbackHandler", let messageBody = message.body as? String {
+            print("Received message: \(messageBody)")
+        }
+    }
+}
+
+/*
+ paymentStatus: success
+ */
 
 // MARK: - Privates -
 
@@ -145,6 +120,43 @@ fileprivate extension WebViewController {
         
         if let url = Bundle.main.url(forResource: "file", withExtension: "html") {
             webView.loadFileURL(url, allowingReadAccessTo: url.deletingLastPathComponent())
+        }
+    }
+    
+    func loadWebView() {
+        if let url = URL(string: Constants.URLs.simplePayment + invoiceId) {
+//            let script = """
+//                    fetch('\(Constants.URLs.main)', {
+//                        method: 'POST',
+//                        headers: {
+//                            'Content-Type': 'application/x-www-form-urlencoded'
+//                        },
+//                        body: '\(urlParams)'
+//                    })
+//                    .then(response => response.json())
+//                    .then(data => console.log(data))
+//                    .catch(error => console.error('Error:', error));
+//                    """
+//            
+//            // Выполнение скрипта после загрузки страницы
+//            webView.loadHTMLString("<html><body></body></html>", baseURL: nil)
+//            webView.evaluateJavaScript(script, completionHandler: nil)
+            
+            var request = URLRequest(url: url)
+            request.httpMethod = HTTPMethod.post.rawValue
+            request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+            
+//            if let postData = urlParams.data(using: .utf8) {
+//                let query = String(data: postData, encoding: .utf8) ?? ""
+//                
+//                var urlComponent = URLComponents(string: Constants.URLs.main)
+//                urlComponent?.query = query
+//                
+//                request.url = urlComponent?.url
+//                request.httpBody = postData
+//            }
+            
+            webView.load(request)
         }
     }
 }

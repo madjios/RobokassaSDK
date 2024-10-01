@@ -7,23 +7,40 @@ enum HTTPMethod: String {
 
 enum Endpoint {
     case getInvoice(PaymentParams, Bool)
+    case confirmHoldPayment(PaymentParams, Bool)
+    case cancelHoldPayment(PaymentParams, Bool)
+    case reccurentPayment(PaymentParams, Bool)
     
     var url: String {
         switch self {
         case .getInvoice: Constants.URLs.main
+        case .confirmHoldPayment: Constants.URLs.holdingConfirm
+        case .cancelHoldPayment: Constants.URLs.holdingCancel
+        case .reccurentPayment: Constants.URLs.recurringPayment
         }
     }
     
     var method: HTTPMethod {
-        switch self {
-        case .getInvoice: .post
-        }
+        .post
     }
     
     var body: [String: Any]? {
         switch self {
-        case let .getInvoice(request, isTest):
-            return request.payPostBody(isTest: isTest)
+        default:
+            return nil
+        }
+    }
+    
+    var stringBody: String? {
+        switch self {
+        case let .getInvoice(params, isTest):
+            return params.payPostParams(isTest: isTest)
+        case let .confirmHoldPayment(params, isTest):
+            return params.payPostParams(isTest: isTest)
+        case let .cancelHoldPayment(params, isTest):
+            return params.payPostParams(isTest: isTest)
+        case let .reccurentPayment(params, isTest):
+            return params.payPostParams(isTest: isTest)
         }
     }
 }
@@ -57,21 +74,27 @@ class RequestManager {
         }
     }
 
-    func requestTo(endpoint: Endpoint) async throws -> Data {
+    private func requestTo(endpoint: Endpoint) async throws -> Data {
         guard let url = URL(string: endpoint.url) else {
             throw RequestError.invalidURL
         }
 
         var request = URLRequest(url: url)
         request.httpMethod = endpoint.method.rawValue
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
         if let body = endpoint.body {
             do {
-                request.httpBody = try JSONSerialization.data(withJSONObject: body, options: [])
+                request.httpBody = try JSONSerialization.data(withJSONObject: body, options: .prettyPrinted)
+                request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             } catch {
                 throw RequestError.jsonSerializationError(error)
             }
+        }
+        
+        if let stringBody = endpoint.stringBody {
+            let httpBody = stringBody.data(using: .utf8)
+            request.httpBody = httpBody
+            request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         }
 
         let (data, response) = try await URLSession.shared.data(for: request)

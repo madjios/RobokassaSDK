@@ -28,7 +28,7 @@
 		756CD3482CAAB7ED0055E764 /* UIApplication+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756CD3472CAAB7ED0055E764 /* UIApplication+Extensions.swift */; };
 		756CD34B2CAAB8710055E764 /* Robokassa.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756CD34A2CAAB8710055E764 /* Robokassa.swift */; };
 		756CD34F2CAAC31A0055E764 /* ViewParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756CD34E2CAAC31A0055E764 /* ViewParams.swift */; };
-		756CD3542CAB119C0055E764 /* Invoce.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756CD3532CAB119C0055E764 /* Invoce.swift */; };
+		756CD3542CAB119C0055E764 /* Invoice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756CD3532CAB119C0055E764 /* Invoice.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -55,7 +55,7 @@
 		756CD3472CAAB7ED0055E764 /* UIApplication+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIApplication+Extensions.swift"; sourceTree = "<group>"; };
 		756CD34A2CAAB8710055E764 /* Robokassa.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Robokassa.swift; sourceTree = "<group>"; };
 		756CD34E2CAAC31A0055E764 /* ViewParams.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewParams.swift; sourceTree = "<group>"; };
-		756CD3532CAB119C0055E764 /* Invoce.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Invoce.swift; sourceTree = "<group>"; };
+		756CD3532CAB119C0055E764 /* Invoice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Invoice.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,7 +116,7 @@
 				756CD3332CAAB7AF0055E764 /* PaymentParams.swift */,
 				756CD34E2CAAC31A0055E764 /* ViewParams.swift */,
 				756CD3342CAAB7AF0055E764 /* Receipt.swift */,
-				756CD3532CAB119C0055E764 /* Invoce.swift */,
+				756CD3532CAB119C0055E764 /* Invoice.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -232,7 +232,7 @@
 				756CD33F2CAAB7AF0055E764 /* OrderParams.swift in Sources */,
 				756CD33C2CAAB7AF0055E764 /* Culture.swift in Sources */,
 				756CD3422CAAB7AF0055E764 /* PaymentParams.swift in Sources */,
-				756CD3542CAB119C0055E764 /* Invoce.swift in Sources */,
+				756CD3542CAB119C0055E764 /* Invoice.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
