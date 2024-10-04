@@ -10,18 +10,25 @@ enum Endpoint {
     case confirmHoldPayment(PaymentParams, Bool)
     case cancelHoldPayment(PaymentParams, Bool)
     case reccurentPayment(PaymentParams, Bool)
+    case checkPaymentStatus(PaymentParams)
     
     var url: String {
-        switch self {
+        return switch self {
         case .getInvoice: Constants.URLs.main
         case .confirmHoldPayment: Constants.URLs.holdingConfirm
         case .cancelHoldPayment: Constants.URLs.holdingCancel
         case .reccurentPayment: Constants.URLs.recurringPayment
+        case .checkPaymentStatus: Constants.URLs.checkPayment
         }
     }
     
     var method: HTTPMethod {
-        .post
+        switch self {
+        case .checkPaymentStatus:
+            return .get
+        default:
+            return .post
+        }
     }
     
     var body: [String: Any]? {
@@ -41,6 +48,8 @@ enum Endpoint {
             return params.payPostParams(isTest: isTest)
         case let .reccurentPayment(params, isTest):
             return params.payPostParams(isTest: isTest)
+        case let .checkPaymentStatus(params):
+            return params.checkPaymentParams()
         }
     }
 }
@@ -131,7 +140,7 @@ class RequestManager {
     }
 }
 
-struct MessagedError: Error {
+public struct MessagedError: Error {
     let message: String
     var localizedDescription: String? { message }
 }

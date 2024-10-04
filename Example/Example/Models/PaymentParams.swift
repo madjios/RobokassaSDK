@@ -192,6 +192,29 @@ extension PaymentParams {
         return result
     }
     
+    func checkPaymentParams() -> String {
+        var result = ""
+        var signature = ""
+        
+        result += "MerchantLogin=\(merchantLogin)"
+        signature += merchantLogin
+        
+        if self.order.invoiceId > 0 {
+            let id = String(order.invoiceId)
+            result += "&invoiceID=\(id)"
+            signature += ":\(id)"
+        } else {
+            signature += ":"
+        }
+        
+        signature += ":" + password2
+        
+        let signatureValue = md5Hash(signature)
+        result += "&SignatureValue=\(signatureValue)"
+        
+        return result
+    }
+    
     // Helper function to generate MD5 hash
     private func md5Hash(_ string: String) -> String {
         // Convert the string to data

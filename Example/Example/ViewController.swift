@@ -220,6 +220,7 @@ fileprivate extension ViewController {
         Robokassa(
             login: Constants.MERCHANT,
             password: Constants.PWD_1,
+            password2: Constants.PWD_2,
             isTesting: false
         )
     }
@@ -227,7 +228,7 @@ fileprivate extension ViewController {
     func createParams() -> PaymentParams {
         PaymentParams(
             order: .init(
-                invoiceId: Int(textField.text ?? "") ?? 0,
+                invoiceId: Int(textField.text ?? "") ?? Int.random(in: 1..<9999),
                 orderSum: 1.0,
                 description: "Test simple pay",
                 expirationDate: Date().dateByAdding(.day, value: 1),

@@ -34,7 +34,7 @@ class Robokassa {
     private(set) var password2: String
     private(set) var isTesting: Bool
     
-    init(login: String, password: String, password2: String = Constants.PWD_2, isTesting: Bool = false) {
+    init(login: String, password: String, password2: String, isTesting: Bool = false) {
         self.login = login
         self.password = password
         self.password2 = password2
@@ -112,7 +112,7 @@ fileprivate extension Robokassa {
         Task { @MainActor in
             do {
                 let result = try await RequestManager.shared.request(to: .getInvoice(params, isTesting), type: Invoice.self)
-                pushWebView(with: result.invoiceID, paymentType: paymentType)
+                pushWebView(with: result.invoiceID, params: params, paymentType: paymentType)
             } catch {
                 print(error.localizedDescription)
             }
@@ -122,7 +122,7 @@ fileprivate extension Robokassa {
     func requestConfirmHoldingPayment(with params: PaymentParams, completion: @escaping (Result<Void, Error>) -> Void) {
         Task { @MainActor in
             do {
-                let _esult = try await RequestManager.shared.request(
+                let _ = try await RequestManager.shared.request(
                     to: .confirmHoldPayment(params, isTesting),
                     type: Bool.self
                 )
@@ -176,8 +176,8 @@ fileprivate extension Robokassa {
         }
     }
     
-    func pushWebView(with invoiceId: String, paymentType: PaymentType) {
-        let webView = WebViewController(invoiceId: invoiceId, paymentType: paymentType, isTesting: isTesting)
+    func pushWebView(with invoiceId: String, params: PaymentParams, paymentType: PaymentType) {
+        let webView = WebViewController(invoiceId: invoiceId, params: params, paymentType: paymentType, isTesting: isTesting)
         
         if UIApplication.shared.topViewController()?.navigationController == nil {
             let navController = UINavigationController(rootViewController: webView)

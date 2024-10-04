@@ -6,17 +6,25 @@ class WebViewController: UIViewController {
     // MARK: - Properties -
     
     private var webView: WKWebView!
+    private var timer: Timer?
+    
+    private var isPaymentSuccessfullyFinished = false
+    private var seconds = 60
     
     private(set) var invoiceId: String
+    private(set) var params: PaymentParams
     private(set) var paymentType: PaymentType
     private(set) var isTesting: Bool
     
+    var onSucccessHandler: (() -> Void)?
+    var onFailureHandler: ((String) -> Void)?
     var onDismissHandler: (() -> Void)?
     
     // MARK: - Init -
     
-    init(invoiceId: String, paymentType: PaymentType, isTesting: Bool = false) {
+    init(invoiceId: String, params: PaymentParams, paymentType: PaymentType, isTesting: Bool = false) {
         self.invoiceId = invoiceId
+        self.params = params
         self.paymentType = paymentType
         self.isTesting = isTesting
         
@@ -34,15 +42,11 @@ class WebViewController: UIViewController {
 
         view.backgroundColor = .white
         
-        let contentController = WKUserContentController()
-        contentController.add(self, name: "callbackHandler")
-        
         let preferences = WKWebpagePreferences()
         preferences.allowsContentJavaScript = true
         
         let config = WKWebViewConfiguration()
         config.defaultWebpagePreferences = preferences
-        config.userContentController = contentController
         
         webView = WKWebView(frame: .zero, configuration: config)
         webView.translatesAutoresizingMaskIntoConstraints = false
@@ -84,21 +88,31 @@ extension WebViewController: WKNavigationDelegate {
             }
         }
     }
-}
-
-// MARK: - WebView Script Message Handler -
-
-extension WebViewController: WKScriptMessageHandler {
-    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        if message.name == "callbackHandler", let messageBody = message.body as? String {
-            print("Received message: \(messageBody)")
+    
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping @MainActor (WKNavigationActionPolicy) -> Void) {
+        if let url = navigationAction.request.url {
+           /*
+            Проверка должна быть такой:
+            - если УРЛ начинается с https://auth.robokassa.ru/Merchant/State/
+            - ИЛИ содержит в себе "ipol.tech/"
+            - ИЛИ содержит в себе "ipol.ru/"
+            тогда мы считаем что платеж завершен.
+            */
+            if url.absoluteString.starts(with: "https://auth.robokassa.ru/Merchant/State/") ||
+                url.absoluteString.contains("ipol.tech/") ||
+                url.absoluteString.contains("ipol.ru/") {
+                checkPaymentState()
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
+                    if !self.isPaymentSuccessfullyFinished {
+                        self.startTimer()
+                    }
+                }
+            }
         }
+        decisionHandler(.allow)
     }
 }
-
-/*
- paymentStatus: success
- */
 
 // MARK: - Privates -
 
@@ -113,7 +127,6 @@ fileprivate extension WebViewController {
             .secure: true
         ])!)
         
-        let webView = WKWebView()
         let webConfig = webView.configuration
         webConfig.preferences.javaScriptCanOpenWindowsAutomatically = true
         webConfig.websiteDataStore = .default()
@@ -124,40 +137,68 @@ fileprivate extension WebViewController {
     }
     
     func loadWebView() {
-        if let url = URL(string: Constants.URLs.simplePayment + invoiceId) {
-//            let script = """
-//                    fetch('\(Constants.URLs.main)', {
-//                        method: 'POST',
-//                        headers: {
-//                            'Content-Type': 'application/x-www-form-urlencoded'
-//                        },
-//                        body: '\(urlParams)'
-//                    })
-//                    .then(response => response.json())
-//                    .then(data => console.log(data))
-//                    .catch(error => console.error('Error:', error));
-//                    """
-//            
-//            // Выполнение скрипта после загрузки страницы
-//            webView.loadHTMLString("<html><body></body></html>", baseURL: nil)
-//            webView.evaluateJavaScript(script, completionHandler: nil)
-            
+        if let url = URL(string: Constants.URLs.simplePayment + "\(params.order.invoiceId)") {
             var request = URLRequest(url: url)
             request.httpMethod = HTTPMethod.post.rawValue
             request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-            
-//            if let postData = urlParams.data(using: .utf8) {
-//                let query = String(data: postData, encoding: .utf8) ?? ""
-//                
-//                var urlComponent = URLComponents(string: Constants.URLs.main)
-//                urlComponent?.query = query
-//                
-//                request.url = urlComponent?.url
-//                request.httpBody = postData
-//            }
-            
             webView.load(request)
         }
+    }
+    
+    func startTimer() {
+        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
+            guard let self, !isPaymentSuccessfullyFinished else {
+                self?.invalidateTimer()
+                return
+            }
+            
+            if self.seconds > 0 {
+                self.seconds -= 1
+                
+                if self.seconds % 2 == 0 {
+                    checkPaymentState()
+                }
+            } else {
+                invalidateTimer()
+            }
+        }
+    }
+    
+    func checkPaymentState() {
+        Task { @MainActor in
+            do {
+                let result = try await RequestManager.shared.request(to: .checkPaymentStatus(params), type: PaymentStatusResponse.self)
+                
+                switch paymentType {
+                case .simplePayment, .confirmHolding, .reccurentPayment, .cancelHolding:
+                    if result.stateCode == .paymentSuccess {
+                        isPaymentSuccessfullyFinished = true
+                        onSucccessHandler?()
+                        didTapBack()
+                    } else {
+                        onFailureHandler?("Payment state code: \(result.stateCode)" + result.stateCode.title)
+                    }
+                case .holding:
+                    if result.stateCode == .holdSuccess {
+                        isPaymentSuccessfullyFinished = true
+                        onSucccessHandler?()
+                        didTapBack()
+                    } else {
+                        onFailureHandler?("Payment state code: \(result.stateCode)" + result.stateCode.title)
+                    }
+                }
+            } catch {
+                invalidateTimer()
+                isPaymentSuccessfullyFinished = true
+                onFailureHandler?(error.localizedDescription)
+                print("In " + #filePath + ", method " + #function + "Catched an error: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    func invalidateTimer() {
+        timer?.invalidate()
+        timer = nil
     }
 }
 

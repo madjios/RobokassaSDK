@@ -12,6 +12,7 @@
 		7527917F2CA86A8900FC7571 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7527917E2CA86A8900FC7571 /* ViewController.swift */; };
 		752791842CA86A8A00FC7571 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 752791832CA86A8A00FC7571 /* Assets.xcassets */; };
 		752791872CA86A8A00FC7571 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 752791862CA86A8A00FC7571 /* Base */; };
+		753BA3D42CB023E900F02A97 /* PaymentResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753BA3D32CB023E900F02A97 /* PaymentResult.swift */; };
 		756CD32A2CAAB7A40055E764 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756CD3292CAAB7A40055E764 /* WebViewController.swift */; };
 		756CD33A2CAAB7AF0055E764 /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756CD32B2CAAB7AF0055E764 /* Date+Extension.swift */; };
 		756CD33B2CAAB7AF0055E764 /* BaseParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756CD32C2CAAB7AF0055E764 /* BaseParams.swift */; };
@@ -39,6 +40,7 @@
 		752791832CA86A8A00FC7571 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		752791862CA86A8A00FC7571 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		752791882CA86A8A00FC7571 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		753BA3D32CB023E900F02A97 /* PaymentResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentResult.swift; sourceTree = "<group>"; };
 		756CD3292CAAB7A40055E764 /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		756CD32B2CAAB7AF0055E764 /* Date+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
 		756CD32C2CAAB7AF0055E764 /* BaseParams.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseParams.swift; sourceTree = "<group>"; };
@@ -117,6 +119,7 @@
 				756CD34E2CAAC31A0055E764 /* ViewParams.swift */,
 				756CD3342CAAB7AF0055E764 /* Receipt.swift */,
 				756CD3532CAB119C0055E764 /* Invoice.swift */,
+				753BA3D32CB023E900F02A97 /* PaymentResult.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -226,6 +229,7 @@
 				756CD33B2CAAB7AF0055E764 /* BaseParams.swift in Sources */,
 				7527917B2CA86A8900FC7571 /* AppDelegate.swift in Sources */,
 				756CD3462CAAB7AF0055E764 /* NetworkManager.swift in Sources */,
+				753BA3D42CB023E900F02A97 /* PaymentResult.swift in Sources */,
 				756CD33D2CAAB7AF0055E764 /* Currency.swift in Sources */,
 				7527917D2CA86A8900FC7571 /* SceneDelegate.swift in Sources */,
 				756CD32A2CAAB7A40055E764 /* WebViewController.swift in Sources */,
