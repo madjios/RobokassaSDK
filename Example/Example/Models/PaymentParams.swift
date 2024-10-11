@@ -17,113 +17,153 @@ struct PaymentParams: BaseParams, Codable {
 }
 
 extension PaymentParams {
-    func payPostBody(isTest: Bool) -> [String: Any] {
-        var body: [String: Any] = [
-            "MerchantLogin": merchantLogin
-        ]
-        
+    var checkPaymentParams: String {
+        var result = "MerchantLogin=\(merchantLogin)"
         var signature = merchantLogin
         
-        // Description
-        if let description = order.description, !description.isEmpty {
-            body["Description"] = description
-        }
-        
-        // Order Sum
-        if order.orderSum > 0.0 {
-            body["OutSum"] = order.orderSum
-            signature += ":\(order.orderSum)"
-        }
-        
-        // Invoice ID
-        if self.order.invoiceId > 0 {
-            body["invoiceID"] = order.invoiceId
-            signature += ":\(order.invoiceId)"
+        if order.invoiceId > 0 {
+            let id = String(order.invoiceId)
+            result += "&invoiceID=\(id)"
+            signature += ":\(id)"
         } else {
             signature += ":"
         }
         
-        // Receipt
-        if let receipt = order.receipt {
-            body["Receipt"] = receipt.toBody()
-            
-            if let jsonData = try? JSONEncoder().encode(receipt),
-               let jsonString = String(data: jsonData, encoding: .utf8) {
-                signature += ":\(jsonString)"
-            }
-        }
-        
-        // Hold
-        if order.isHold {
-            body["StepByStep"] = "true"
-            signature += ":true"
-        }
-        
-        // Recurrent
-        if order.isRecurrent {
-            body["Recurring"] = "true"
-        }
-        
-        // Expiration Date
-        if let expirationDate = order.expirationDate {
-            body["ExpirationDate"] = expirationDate.isoString
-        }
-        
-        // Currency Label
-        if let incCurrLabel = order.incCurrLabel, !incCurrLabel.isEmpty {
-            body["IncCurrLabel"] = incCurrLabel
-        }
-        
-        // Culture
-        if let culture = customer.culture {
-            body["Culture"] = culture.iso
-        }
-        
-        // Email
-        if let email = customer.email, !email.isEmpty {
-            body["Email"] = email
-        }
-        
-        // User IP
-        if let ip = customer.ip, !ip.isEmpty {
-            body["UserIp"] = ip
-            signature += ":\(ip)"
-        }
-        
-        // Test Mode
-        if isTest {
-            body["IsTest"] = "1"
-        }
-        
-        signature += ":\(password1)"
+        signature += ":\(password2)"
         
         let signatureValue = md5Hash(signature)
-        body["SignatureValue"] = signatureValue
+        result += "&Signature=\(signatureValue)"
         
-        return body
+        return result
     }
     
-    func payPostParams(isTest: Bool) -> String {
-        var result = ""
-        var signature = ""
-        
-        result += "MerchantLogin=\(merchantLogin)"
-        signature += merchantLogin
-        
-        // Description
-        if let description = self.order.description, !description.isEmpty {
-            result += "&Description=\(description)"
-        }
+    var confirmHoldingParams: String {
+        var result = "MerchantLogin=\(merchantLogin)"
+        var signature = merchantLogin
         
         // Order Sum
-        if self.order.orderSum > 0.0 {
+        if order.orderSum > 0 {
             let outSum = String(order.orderSum)
             result += "&OutSum=\(outSum)"
             signature += ":\(outSum)"
         }
         
         // Invoice ID
-        if self.order.invoiceId > 0 {
+        if order.invoiceId > 0 {
+            let id = String(order.invoiceId)
+            result += "&invoiceID=\(id)"
+            signature += ":\(id)"
+        } else {
+            signature += ":"
+        }
+        
+        // Receipt
+        if let receipt = order.receipt {
+            if let jsonData = try? JSONEncoder().encode(receipt),
+               let jsonString = String(data: jsonData, encoding: .utf8) {
+                if let jsonEncoded = jsonString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
+                    result += "&Receipt=\(jsonEncoded)"
+                    signature += ":\(jsonString)"
+                }
+            }
+        }
+        
+        signature += ":\(password1)"
+        
+        let signatureValue = md5Hash(signature)
+        result += "&SignatureValue=\(signatureValue)"
+        
+        return result
+    }
+    
+    var cancelHoldingParams: String {
+        var result = "MerchantLogin=\(merchantLogin)"
+        var signature = merchantLogin
+        
+        // Order Sum
+        if order.orderSum > 0 {
+            let outSum = String(order.orderSum)
+            result += "&OutSum=\(outSum)"
+        }
+        
+        // Invoice ID
+        if order.invoiceId > 0 {
+            let id = String(order.invoiceId)
+            result += "&invoiceID=\(id)"
+            signature += "::\(id)"
+        } else {
+            signature += "::"
+        }
+        
+        signature += ":\(password1)"
+        
+        let signatureValue = md5Hash(signature)
+        result += "&SignatureValue=\(signatureValue)"
+        
+        return result
+    }
+    
+    var recurrentPostParams: String {
+        var result = "MerchantLogin=\(merchantLogin)"
+        var signature = merchantLogin
+        
+        // Order Sum
+        if order.orderSum > 0 {
+            let outSum = String(order.orderSum)
+            result += "&OutSum=\(outSum)"
+            signature += ":\(outSum)"
+        }
+        
+        // Invoice ID
+        if order.invoiceId > 0 {
+            let id = String(order.invoiceId)
+            result += "&invoiceID=\(id)"
+            signature += ":\(id)"
+        } else {
+            signature += ":"
+        }
+        
+        if order.previousInvoiceId > 0 {
+            result += "&PreviousInvoiceID=\(order.previousInvoiceId)"
+        }
+        
+        // Receipt
+        if let receipt = order.receipt {
+            if let jsonData = try? JSONEncoder().encode(receipt),
+               let jsonString = String(data: jsonData, encoding: .utf8) {
+                if let jsonEncoded = jsonString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
+                    result += "&Receipt=\(jsonEncoded)"
+                    signature += ":\(jsonString)"
+                }
+            }
+        }
+        
+        signature += ":\(password1)"
+        
+        let signatureValue = md5Hash(signature)
+        result += "&SignatureValue=\(signatureValue)"
+        
+        return result
+    }
+    
+    func payPostParams(isTest: Bool) -> String {
+        var result = "MerchantLogin=\(merchantLogin)"
+        var signature = merchantLogin
+        
+        // Description
+        if let description = order.description, !description.isEmpty {
+            result += "&Description=\(description)"
+        }
+        
+        // Order Sum
+        if order.orderSum > 0 {
+            let outSum = String(order.orderSum)
+            result += "&OutSum=\(outSum)"
+            signature += ":\(outSum)"
+        }
+        
+        // Invoice ID
+        if order.invoiceId > 0 {
             let id = String(order.invoiceId)
             result += "&invoiceID=\(id)"
             signature += ":\(id)"
@@ -163,6 +203,11 @@ extension PaymentParams {
             result += "&IncCurrLabel=\(incCurrLabel)"
         }
         
+        if let token = order.token, !token.isEmpty {
+            result += "&Token=\(token)"
+            signature += ":\(token)"
+        }
+        
         // Culture
         if let culture = customer.culture {
             result += "&Culture=\(culture.iso)"
@@ -185,29 +230,6 @@ extension PaymentParams {
         }
         
         signature += ":\(password1)"
-        
-        let signatureValue = md5Hash(signature)
-        result += "&SignatureValue=\(signatureValue)"
-        
-        return result
-    }
-    
-    func checkPaymentParams() -> String {
-        var result = ""
-        var signature = ""
-        
-        result += "MerchantLogin=\(merchantLogin)"
-        signature += merchantLogin
-        
-        if self.order.invoiceId > 0 {
-            let id = String(order.invoiceId)
-            result += "&invoiceID=\(id)"
-            signature += ":\(id)"
-        } else {
-            signature += ":"
-        }
-        
-        signature += ":" + password2
         
         let signatureValue = md5Hash(signature)
         result += "&SignatureValue=\(signatureValue)"

@@ -12,18 +12,6 @@ struct Receipt: Codable {
         self.sno = sno
         self.items = items
     }
-    
-    func toBody() -> [String: Any] {
-        var body: [String: Any] = [:]
-        
-        if let sno {
-            body["sno"] = sno.rawValue
-        }
-        
-        body["items"] = items.map { $0.toBody() }
-        
-        return body
-    }
 }
 
 // Assuming PaymentMethod, PaymentObject, and Tax are already defined in your Swift code
@@ -96,36 +84,6 @@ struct ReceiptItem: Codable {
         self.paymentMethod = paymentMethod
         self.paymentObject = paymentObject
         self.tax = tax
-    }
-    
-    func toBody() -> [String: Any] {
-        var body: [String: Any] = [
-            "name": name,
-            "sum": sum,
-            "quantity": quantity
-        ]
-        
-        if let cost, cost > 0.0 {
-            body["cost"] = cost
-        }
-        
-        if let nomenclatureCode, !nomenclatureCode.isEmpty {
-            body["nomenclatureCode"] = nomenclatureCode
-        }
-        
-        if let paymentMethod {
-            body["paymentMethod"] = paymentMethod.rawValue
-        }
-        
-        if let paymentObject {
-            body["paymentObject"] = paymentObject.rawValue
-        }
-        
-        if let tax {
-            body["tax"] = tax.rawValue
-        }
-        
-        return body
     }
 }
 

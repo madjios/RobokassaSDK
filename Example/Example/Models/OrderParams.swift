@@ -6,6 +6,7 @@ struct OrderParams: Codable {
     var orderSum: Double = 0.0
     var description: String? = nil
     var incCurrLabel: String? = nil
+    var token: String? = nil
     var isRecurrent: Bool = false
     var isHold: Bool = false
     var outSumCurrency: Currency? = nil

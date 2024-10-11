@@ -8,7 +8,6 @@ class WebViewController: UIViewController {
     private var webView: WKWebView!
     private var timer: Timer?
     
-    private var isPaymentSuccessfullyFinished = false
     private var seconds = 60
     
     private(set) var invoiceId: String
@@ -47,12 +46,13 @@ class WebViewController: UIViewController {
         
         let config = WKWebViewConfiguration()
         config.defaultWebpagePreferences = preferences
+        config.preferences.javaScriptCanOpenWindowsAutomatically = true
+        config.websiteDataStore = .default()
         
         webView = WKWebView(frame: .zero, configuration: config)
         webView.translatesAutoresizingMaskIntoConstraints = false
         webView.navigationDelegate = self
         
-        configureWebSettings()
         configureBackButton()
         embedSubviews()
         setSubviewsConstraints()
@@ -64,31 +64,6 @@ class WebViewController: UIViewController {
 // MARK: - WebView Delegate -
 
 extension WebViewController: WKNavigationDelegate {
-    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        // Выполняем JavaScript для получения текста ответа
-        let script = "document.body.innerText;"
-        webView.evaluateJavaScript(script) { (result, error) in
-            if let error = error {
-                print("Ошибка при выполнении скрипта: \(error)")
-                return
-            }
-            if let result, let json = result as? String, let jsonData = json.data(using: .utf8) {
-                do {
-                    if let object = try JSONSerialization.jsonObject(with: jsonData) as? [String: Any] {
-                        let data = try JSONSerialization.data(withJSONObject: object, options: .prettyPrinted)
-                        let stringData = String(data: data, encoding: .utf8) ?? ""
-                        print(stringData)
-//                        let mappedObject = try JSONDecoder().decode(Invoce.self, from: data)
-                    }
-                } catch {
-                    print(error.localizedDescription)
-                }
-            } else {
-                print("Invalid response format")
-            }
-        }
-    }
-    
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping @MainActor (WKNavigationActionPolicy) -> Void) {
         if let url = navigationAction.request.url {
            /*
@@ -104,7 +79,7 @@ extension WebViewController: WKNavigationDelegate {
                 checkPaymentState()
                 
                 DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
-                    if !self.isPaymentSuccessfullyFinished {
+                    if let timer = self.timer, timer.isValid == true {
                         self.startTimer()
                     }
                 }
@@ -117,27 +92,8 @@ extension WebViewController: WKNavigationDelegate {
 // MARK: - Privates -
 
 fileprivate extension WebViewController {
-    func configureWebSettings() {
-        let dataStore = WKWebsiteDataStore.default()
-        dataStore.httpCookieStore.setCookie(HTTPCookie(properties: [
-            .domain: "https://auth.robokassa.ru",
-            .path: "/",
-            .name: "cookie_name",
-            .value: "cookie_value",
-            .secure: true
-        ])!)
-        
-        let webConfig = webView.configuration
-        webConfig.preferences.javaScriptCanOpenWindowsAutomatically = true
-        webConfig.websiteDataStore = .default()
-        
-        if let url = Bundle.main.url(forResource: "file", withExtension: "html") {
-            webView.loadFileURL(url, allowingReadAccessTo: url.deletingLastPathComponent())
-        }
-    }
-    
     func loadWebView() {
-        if let url = URL(string: Constants.URLs.simplePayment + "\(params.order.invoiceId)") {
+        if let url = URL(string: Constants.URLs.simplePayment + invoiceId) {
             var request = URLRequest(url: url)
             request.httpMethod = HTTPMethod.post.rawValue
             request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
@@ -147,7 +103,7 @@ fileprivate extension WebViewController {
     
     func startTimer() {
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
-            guard let self, !isPaymentSuccessfullyFinished else {
+            guard let self else {
                 self?.invalidateTimer()
                 return
             }
@@ -165,34 +121,41 @@ fileprivate extension WebViewController {
     }
     
     func checkPaymentState() {
+        print(#function)
         Task { @MainActor in
             do {
-                let result = try await RequestManager.shared.request(to: .checkPaymentStatus(params), type: PaymentStatusResponse.self)
+                let result = try await RequestManager.shared.request(to: .checkPaymentStatus(params))
                 
-                switch paymentType {
-                case .simplePayment, .confirmHolding, .reccurentPayment, .cancelHolding:
-                    if result.stateCode == .paymentSuccess {
-                        isPaymentSuccessfullyFinished = true
+                if let value = result["Code"] as? String, value == "0" {
+                    invalidateTimer()
+                    onSucccessHandler?()
+                } else {
+                    if let value = result["Result"] as? String, value == "0" {
+                        invalidateTimer()
                         onSucccessHandler?()
-                        didTapBack()
                     } else {
-                        onFailureHandler?("Payment state code: \(result.stateCode)" + result.stateCode.title)
+                        handleFailureState(result)
                     }
-                case .holding:
-                    if result.stateCode == .holdSuccess {
-                        isPaymentSuccessfullyFinished = true
-                        onSucccessHandler?()
-                        didTapBack()
-                    } else {
-                        onFailureHandler?("Payment state code: \(result.stateCode)" + result.stateCode.title)
-                    }
+                }
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
+                    self.didTapBack()
                 }
             } catch {
                 invalidateTimer()
-                isPaymentSuccessfullyFinished = true
                 onFailureHandler?(error.localizedDescription)
-                print("In " + #filePath + ", method " + #function + "Catched an error: \(error.localizedDescription)")
+                print("In " + #filePath + ", method " + #function + " -->\nCatched an error: \(error.localizedDescription)")
             }
+        }
+    }
+    
+    func handleFailureState(_ result: [String: Any]) {
+        do {
+            let data = try JSONSerialization.data(withJSONObject: result, options: .prettyPrinted)
+            let string = String(data: data, encoding: .utf8) ?? ""
+            onFailureHandler?(string)
+        } catch {
+            onFailureHandler?("Could not parse any Data")
         }
     }
     

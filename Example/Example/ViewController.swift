@@ -1,6 +1,6 @@
 import UIKit
 
-class ViewController: UIViewController {
+final class ViewController: UIViewController {
     
     // MARK: - Lifecycle -
     
@@ -32,91 +32,47 @@ class ViewController: UIViewController {
         return textField
     }()
     
-    private let simplePaymentButton: UIButton = {
-        let button = UIButton(type: .custom)
+    private let simplePaymentButton: Button = {
+        let button = Button()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle(PaymentType.simplePayment.title, for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .systemBlue
-        button.clipsToBounds = true
-        button.layer.cornerRadius = 16.0
         
         return button
     }()
     
-    private let holdingButton: UIButton = {
-        let button = UIButton(type: .custom)
+    private let holdingButton: Button = {
+        let button = Button()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle(PaymentType.holding.title, for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .systemBlue
-        button.clipsToBounds = true
-        button.layer.cornerRadius = 16.0
         
         return button
     }()
     
-    private let confirmHoldingButton: UIButton = {
-        let button = UIButton(type: .custom)
+    private let confirmHoldingButton: Button = {
+        let button = Button()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle(PaymentType.confirmHolding.title, for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .systemBlue
-        button.clipsToBounds = true
-        button.layer.cornerRadius = 16.0
         
         return button
     }()
     
-    private let cancelHoldingButton: UIButton = {
-        let button = UIButton(type: .custom)
+    private let cancelHoldingButton: Button = {
+        let button = Button()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle(PaymentType.cancelHolding.title, for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .systemBlue
-        button.clipsToBounds = true
-        button.layer.cornerRadius = 16.0
         
         return button
     }()
     
-    private let reccurentPaymentButton: UIButton = {
-        let button = UIButton(type: .custom)
+    private let reccurentPaymentButton: Button = {
+        let button = Button()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle(PaymentType.reccurentPayment.title, for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .systemBlue
-        button.clipsToBounds = true
-        button.layer.cornerRadius = 16.0
         
         return button
     }()
     
-    private let hStack: UIStackView = {
-        let stack = UIStackView()
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        stack.axis = .horizontal
-        stack.distribution = .fillProportionally
-        stack.spacing = 16.0
-        
-        return stack
-    }()
-    
-    private let recurrentLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .systemGray2
-        label.text = "Есть реккурентный платеж"
-        
-        return label
-    }()
-    
-    private let switcher: UISwitch = {
-        let switcher = UISwitch()
-        switcher.translatesAutoresizingMaskIntoConstraints = false
-        
-        return switcher
-    }()
+    private let storage = Storage()
     
     private let buttonHeight: CGFloat = 48.0
     
@@ -129,6 +85,14 @@ class ViewController: UIViewController {
         view.backgroundColor = .secondarySystemBackground
         setupActions()
         setupSubviews()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        simplePaymentButton.isLoading = false
+        holdingButton.isLoading = false
+        reccurentPaymentButton.isLoading = false
     }
 
 }
@@ -144,18 +108,22 @@ fileprivate extension ViewController {
         }), for: .editingChanged)
         
         simplePaymentButton.addAction(.init(handler: { [weak self] _ in
+            self?.simplePaymentButton.isLoading = true
             self?.routeToWebView(with: .simplePayment)
         }), for: .touchUpInside)
         
         holdingButton.addAction(.init(handler: { [weak self] _ in
+            self?.holdingButton.isLoading = true
             self?.routeToWebView(with: .holding)
         }), for: .touchUpInside)
         
         confirmHoldingButton.addAction(.init(handler: { [weak self] _ in
+            self?.confirmHoldingButton.isLoading = true
             self?.didTapConfirmHolding()
         }), for: .touchUpInside)
         
         cancelHoldingButton.addAction(.init(handler: { [weak self] _ in
+            self?.cancelHoldingButton.isLoading = true
             self?.didTapCancelHolding()
         }), for: .touchUpInside)
         
@@ -174,7 +142,7 @@ fileprivate extension ViewController {
         case .holding:
             robokassa.startHoldingPayment(with: paymentParams)
         case .reccurentPayment:
-            robokassa.startReccurentPayment(with: paymentParams)
+            robokassa.startDefaultReccurentPayment(with: paymentParams)
         default:
             break
         }
@@ -186,10 +154,12 @@ fileprivate extension ViewController {
 fileprivate extension ViewController {
     func didTapConfirmHolding() {
         createRobokassa()
-            .confirmHoldingPayment(with: createParams()) { result in
+            .confirmHoldingPayment(with: createParams()) { [weak self] result in
+                self?.confirmHoldingButton.isLoading = false
+                
                 switch result {
-                case .success:
-                    print("SUCCESSFULLY CONFIRMED HOLDING PAYMENT")
+                case let .success(response):
+                    print("SUCCESSFULLY CONFIRMED HOLDING PAYMENT. Response: \(response)")
                 case let .failure(error):
                     print(error.localizedDescription)
                 }
@@ -198,10 +168,12 @@ fileprivate extension ViewController {
     
     func didTapCancelHolding() {
         createRobokassa()
-            .cancelHoldingPayment(with: createParams()) { result in
+            .cancelHoldingPayment(with: createParams()) { [weak self] result in
+                self?.cancelHoldingButton.isLoading = false
+                
                 switch result {
-                case .success:
-                    print("SUCCESSFULLY CANCELLED HOLDING PAYMENT")
+                case let .success(response):
+                    print("SUCCESSFULLY CANCELLED HOLDING PAYMENT. Response: \(response)")
                 case let .failure(error):
                     print(error.localizedDescription)
                 }
@@ -209,8 +181,17 @@ fileprivate extension ViewController {
     }
     
     func didTapRecurrent() {
-        if switcher.isOn {
-            
+        if let previousOrderId = storage.previoudOrderId {
+            var params = createParams()
+            params.order.previousInvoiceId = previousOrderId
+            createRobokassa().startReccurentPayment(with: params) { result in
+                switch result {
+                case let .success(response):
+                    print("SUCCESSFULLY FINISHED RECURRENT PAYMENT. Response: \(response)")
+                case let .failure(error):
+                    print(error.localizedDescription)
+                }
+            }
         } else {
             routeToWebView(with: .reccurentPayment)
         }
@@ -228,7 +209,7 @@ fileprivate extension ViewController {
     func createParams() -> PaymentParams {
         PaymentParams(
             order: .init(
-                invoiceId: Int(textField.text ?? "") ?? Int.random(in: 1..<9999),
+                invoiceId: Int(textField.text ?? "") ?? Int.random(in: 1..<999999),
                 orderSum: 1.0,
                 description: "Test simple pay",
                 expirationDate: Date().dateByAdding(.day, value: 1),
@@ -244,7 +225,7 @@ fileprivate extension ViewController {
                     ]
                 )
             ),
-            customer: .init(culture: .ru, email: "p.kolosov@list.ru"),
+            customer: .init(culture: .ru, email: "iammadj.u@gmail.com"),
             view: .init(toolbarText: "Простая оплата", hasToolbar: true)
         )
     }
@@ -260,7 +241,6 @@ fileprivate extension ViewController {
     
     func embedSubviews() {
         view.addSubview(vStack)
-        view.addSubview(hStack)
         
         vStack.addArrangedSubview(textField)
         vStack.addArrangedSubview(simplePaymentButton)
@@ -269,17 +249,14 @@ fileprivate extension ViewController {
         vStack.addArrangedSubview(cancelHoldingButton)
         vStack.addArrangedSubview(reccurentPaymentButton)
         vStack.setCustomSpacing(32.0, after: textField)
-        
-        hStack.addArrangedSubview(recurrentLabel)
-        hStack.addArrangedSubview(switcher)
     }
     
     func setSubviewsConstraints() {
         NSLayoutConstraint.activate([
-            vStack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             vStack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32.0),
             vStack.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 32.0),
-            vStack.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -32.0)
+            vStack.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -32.0),
+            vStack.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -32.0)
         ])
         
         NSLayoutConstraint.activate([
@@ -287,13 +264,6 @@ fileprivate extension ViewController {
             simplePaymentButton.heightAnchor.constraint(equalToConstant: buttonHeight),
             holdingButton.heightAnchor.constraint(equalToConstant: buttonHeight),
             reccurentPaymentButton.heightAnchor.constraint(equalToConstant: buttonHeight)
-        ])
-        
-        NSLayoutConstraint.activate([
-            hStack.topAnchor.constraint(equalTo: vStack.bottomAnchor, constant: 16.0),
-            hStack.leftAnchor.constraint(greaterThanOrEqualTo: view.leftAnchor, constant: 16.0),
-            hStack.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16.0),
-            hStack.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -32.0)
         ])
     }
 }

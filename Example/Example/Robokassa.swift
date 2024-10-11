@@ -58,7 +58,7 @@ class Robokassa {
         fetchInvoice(with: params, paymentType: .holding)
     }
     
-    func confirmHoldingPayment(with params: PaymentParams, completion: @escaping (Result<Void, Error>) -> Void) {
+    func confirmHoldingPayment(with params: PaymentParams, completion: @escaping (Result<Bool, Error>) -> Void) {
         var params = params
         params.merchantLogin = login
         params.password1 = password
@@ -67,17 +67,17 @@ class Robokassa {
         requestConfirmHoldingPayment(with: params, completion: completion)
     }
     
-    func confirmHoldingPayment(with params: PaymentParams) async throws {
+    func confirmHoldingPayment(with params: PaymentParams) async throws -> Bool {
         var params = params
         params.merchantLogin = login
         params.password1 = password
         params.password2 = password2
         params.order.isHold = true
         
-        try await requestConfirmHoldingPayment(with: params)
+        return try await requestConfirmHoldingPayment(with: params)
     }
     
-    func cancelHoldingPayment(with params: PaymentParams, completion: @escaping (Result<Void, Error>) -> Void) {
+    func cancelHoldingPayment(with params: PaymentParams, completion: @escaping (Result<Bool, Error>) -> Void) {
         var params = params
         params.merchantLogin = login
         params.password1 = password
@@ -86,22 +86,42 @@ class Robokassa {
         requestHoldingPaymentCancellation(with: params, completion: completion)
     }
     
-    func cancelHoldingPayment(with params: PaymentParams) async throws {
+    func cancelHoldingPayment(with params: PaymentParams) async throws -> Bool {
         var params = params
         params.merchantLogin = login
         params.password1 = password
         params.password2 = password2
         params.order.isHold = true
-        try await requestHoldingPaymentCancellation(with: params)
+        
+        return try await requestHoldingPaymentCancellation(with: params)
     }
     
-    func startReccurentPayment(with params: PaymentParams) {
+    func startDefaultReccurentPayment(with params: PaymentParams) {
         var params = params
         params.merchantLogin = login
         params.password1 = password
         params.password2 = password2
         params.order.isRecurrent = true
         fetchInvoice(with: params, paymentType: .reccurentPayment)
+    }
+    
+    func startReccurentPayment(with params: PaymentParams, completion: @escaping (Result<Bool, Error>) -> Void) {
+        var params = params
+        params.merchantLogin = login
+        params.password1 = password
+        params.password2 = password2
+        params.order.isRecurrent = true
+        requestRecurrentPayment(with: params, completion: completion)
+    }
+    
+    func startReccurentPayment(with params: PaymentParams) async throws -> Bool {
+        var params = params
+        params.merchantLogin = login
+        params.password1 = password
+        params.password2 = password2
+        params.order.isRecurrent = true
+        
+        return try await requestRecurrentPayment(with: params)
     }
 }
 
@@ -119,14 +139,12 @@ fileprivate extension Robokassa {
         }
     }
     
-    func requestConfirmHoldingPayment(with params: PaymentParams, completion: @escaping (Result<Void, Error>) -> Void) {
+    func requestConfirmHoldingPayment(with params: PaymentParams, completion: @escaping (Result<Bool, Error>) -> Void) {
         Task { @MainActor in
             do {
-                let _ = try await RequestManager.shared.request(
-                    to: .confirmHoldPayment(params, isTesting),
-                    type: Bool.self
-                )
-                completion(.success(()))
+                let response = try await RequestManager.shared.request(to: .confirmHoldPayment(params), type: String.self)
+                let result = response.contains("true")
+                completion(.success(result))
             } catch {
                 print(error.localizedDescription)
                 completion(.failure(error))
@@ -134,46 +152,45 @@ fileprivate extension Robokassa {
         }
     }
     
-    func requestConfirmHoldingPayment(with params: PaymentParams) async throws {
+    func requestConfirmHoldingPayment(with params: PaymentParams) async throws -> Bool {
+        let response = try await RequestManager.shared.request(to: .confirmHoldPayment(params), type: String.self)
+        return response.contains("true")
+    }
+    
+    func requestHoldingPaymentCancellation(with params: PaymentParams, completion: @escaping (Result<Bool, Error>) -> Void) {
         Task { @MainActor in
             do {
-                return try await RequestManager.shared.request(
-                    to: .confirmHoldPayment(params, isTesting),
-                    type: Bool.self
-                )
+                let response = try await RequestManager.shared.request(to: .cancelHoldPayment(params), type: String.self)
+                let result = response.contains("true")
+                completion(.success(result))
             } catch {
                 print(error.localizedDescription)
-                throw error
+                completion(.failure(error))
             }
         }
     }
     
-    func requestHoldingPaymentCancellation(with params: PaymentParams, completion: @escaping (Result<Void, Error>) -> Void) {
+    func requestHoldingPaymentCancellation(with params: PaymentParams) async throws -> Bool {
+        let response = try await RequestManager.shared.request(to: .cancelHoldPayment(params), type: String.self)
+        return response.contains("true")
+    }
+    
+    func requestRecurrentPayment(with params: PaymentParams, completion: @escaping (Result<Bool, Error>) -> Void) {
         Task { @MainActor in
             do {
-                let _ = try await RequestManager.shared.request(
-                    to: .cancelHoldPayment(params, isTesting), 
-                    type: Bool.self
-                )
-                completion(.success(()))
+                let response = try await RequestManager.shared.request(to: .reccurentPayment(params), type: String.self)
+                let result = response.contains("true")
+                completion(.success(result))
             } catch {
                 print(error.localizedDescription)
+                completion(.failure(error))
             }
         }
     }
     
-    func requestHoldingPaymentCancellation(with params: PaymentParams) async throws {
-        Task { @MainActor in
-            do {
-                return try await RequestManager.shared.request(
-                    to: .cancelHoldPayment(params, isTesting),
-                    type: Bool.self
-                )
-            } catch {
-                print(error.localizedDescription)
-                throw error
-            }
-        }
+    func requestRecurrentPayment(with params: PaymentParams) async throws -> Bool {
+        let response = try await RequestManager.shared.request(to: .reccurentPayment(params), type: String.self)
+        return response.contains("true")
     }
     
     func pushWebView(with invoiceId: String, params: PaymentParams, paymentType: PaymentType) {

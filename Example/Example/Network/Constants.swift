@@ -30,6 +30,6 @@ extension Constants {
         static let holdingConfirm = "https://auth.robokassa.ru/Merchant/Payment/Confirm"
         static let holdingCancel = "https://auth.robokassa.ru/Merchant/Payment/Cancel"
         static let recurringPayment = "https://auth.robokassa.ru/Merchant/Recurring"
-        static let checkPayment = "https://auth.robokassa.ru/Merchant/WebService/Service.asmx/OpStateExt?"
+        static let checkPayment = "https://auth.robokassa.ru/Merchant/WebService/Service.asmx/OpStateExt"
     }
 }

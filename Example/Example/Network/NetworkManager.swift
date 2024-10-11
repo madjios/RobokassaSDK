@@ -1,57 +1,9 @@
 import Foundation
+import Compression
 
 enum HTTPMethod: String {
     case get = "GET"
     case post = "POST"
-}
-
-enum Endpoint {
-    case getInvoice(PaymentParams, Bool)
-    case confirmHoldPayment(PaymentParams, Bool)
-    case cancelHoldPayment(PaymentParams, Bool)
-    case reccurentPayment(PaymentParams, Bool)
-    case checkPaymentStatus(PaymentParams)
-    
-    var url: String {
-        return switch self {
-        case .getInvoice: Constants.URLs.main
-        case .confirmHoldPayment: Constants.URLs.holdingConfirm
-        case .cancelHoldPayment: Constants.URLs.holdingCancel
-        case .reccurentPayment: Constants.URLs.recurringPayment
-        case .checkPaymentStatus: Constants.URLs.checkPayment
-        }
-    }
-    
-    var method: HTTPMethod {
-        switch self {
-        case .checkPaymentStatus:
-            return .get
-        default:
-            return .post
-        }
-    }
-    
-    var body: [String: Any]? {
-        switch self {
-        default:
-            return nil
-        }
-    }
-    
-    var stringBody: String? {
-        switch self {
-        case let .getInvoice(params, isTest):
-            return params.payPostParams(isTest: isTest)
-        case let .confirmHoldPayment(params, isTest):
-            return params.payPostParams(isTest: isTest)
-        case let .cancelHoldPayment(params, isTest):
-            return params.payPostParams(isTest: isTest)
-        case let .reccurentPayment(params, isTest):
-            return params.payPostParams(isTest: isTest)
-        case let .checkPaymentStatus(params):
-            return params.checkPaymentParams()
-        }
-    }
 }
 
 enum RequestError: Error {
@@ -62,24 +14,72 @@ enum RequestError: Error {
     case invalidResponse
 }
 
-class RequestManager {
-    private let decoder: JSONDecoder
+final class XMLParserDelegateImplementation: NSObject, XMLParserDelegate {
+    var currentElement = ""
+    var currentValue = ""
     
+    private(set) var dictionary: [String: Any] = [:]
+    
+    func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
+        currentElement = elementName
+        currentValue = ""
+    }
+    
+    func parser(_ parser: XMLParser, foundCharacters string: String) {
+        currentValue += string
+    }
+    
+    func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
+        dictionary[elementName] = currentValue
+    }
+    
+    func parserDidEndDocument(_ parser: XMLParser) {
+        // Создание объекта из распарсенного словаря
+        if let jsonData = try? JSONSerialization.data(withJSONObject: dictionary, options: .prettyPrinted) {
+            print("XML PARSER:\n" + String(data: jsonData, encoding: .utf8)!)
+        }
+    }
+}
+
+final class RequestManager {
     static let shared = RequestManager()
 
-    private init() {
-        decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .millisecondsSince1970
-    }
+    private init() {}
     
     func request<T: Decodable>(to endpoint: Endpoint, type: T.Type) async throws -> T {
         do {
             let data = try await requestTo(endpoint: endpoint)
-            let decodedData = try mapToObject(from: data, type: T.self)
             
-            return decodedData
+            if let object = try? Mapper().mapToObject(from: data, type: T.self) {
+                return object
+            } else {
+                throw MessagedError(message: "Could not parse any valid JSON either XML")
+            }
         } catch {
             throw error
+        }
+    }
+    
+    func request(to endpoint: Endpoint) async throws -> [String: Any] {
+        do {
+            let data = try await requestTo(endpoint: endpoint)
+            return xmlToObject(data: data)
+        } catch {
+            throw error
+        }
+    }
+    
+    private func xmlToObject(data: Data) -> [String: Any] {
+        // Парсер для XML
+        let parser = XMLParser(data: data)
+        let delegate = XMLParserDelegateImplementation()
+        parser.delegate = delegate
+        
+        if parser.parse() {
+            return delegate.dictionary
+        } else {
+            print("Ошибка при парсинге XML.")
+            return [:]
         }
     }
 
@@ -90,32 +90,36 @@ class RequestManager {
 
         var request = URLRequest(url: url)
         request.httpMethod = endpoint.method.rawValue
-
-        if let body = endpoint.body {
-            do {
-                request.httpBody = try JSONSerialization.data(withJSONObject: body, options: .prettyPrinted)
-                request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            } catch {
-                throw RequestError.jsonSerializationError(error)
-            }
-        }
         
         if let stringBody = endpoint.stringBody {
-            let httpBody = stringBody.data(using: .utf8)
-            request.httpBody = httpBody
             request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+            request.httpBody = stringBody.data(using: .utf8)
         }
+        
+        Logger().log(request: request)
 
         let (data, response) = try await URLSession.shared.data(for: request)
         
         guard let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) else {
+            print("-------- FAILED IN RESPONSE. STATUS CODE is \((response as? HTTPURLResponse)?.statusCode ?? 0)")
             throw RequestError.invalidResponse
         }
+        
+        Logger().log(response: httpResponse, data: data)
 
         return data
     }
+}
+
+final class Mapper {
+    private let decoder: JSONDecoder
+
+    init() {
+        decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .millisecondsSince1970
+    }
     
-    private func mapToObject<T>(from data: Data, type: T.Type) throws -> T where T : Decodable {
+    func mapToObject<T>(from data: Data, type: T.Type) throws -> T where T : Decodable {
         do {
             return try decoder.decode(type, from: data)
         } catch DecodingError.dataCorrupted(let context) {
@@ -140,7 +144,7 @@ class RequestManager {
     }
 }
 
-public struct MessagedError: Error {
+public struct MessagedError: LocalizedError {
     let message: String
-    var localizedDescription: String? { message }
+    public var errorDescription: String? { message }
 }

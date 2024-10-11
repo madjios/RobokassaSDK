@@ -30,6 +30,12 @@
 		756CD34B2CAAB8710055E764 /* Robokassa.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756CD34A2CAAB8710055E764 /* Robokassa.swift */; };
 		756CD34F2CAAC31A0055E764 /* ViewParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756CD34E2CAAC31A0055E764 /* ViewParams.swift */; };
 		756CD3542CAB119C0055E764 /* Invoice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756CD3532CAB119C0055E764 /* Invoice.swift */; };
+		75B787D02CB5BEA900B71634 /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B787CF2CB5BEA900B71634 /* Endpoint.swift */; };
+		75B787D22CB5C7B200B71634 /* OperationResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B787D12CB5C7B200B71634 /* OperationResponse.swift */; };
+		75B787D42CB6AC9700B71634 /* OperationStateResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B787D32CB6AC9700B71634 /* OperationStateResponse.swift */; };
+		75B787D62CB9821000B71634 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B787D52CB9821000B71634 /* Button.swift */; };
+		75B787D82CB9872900B71634 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B787D72CB9872900B71634 /* Logger.swift */; };
+		75B787DA2CB998A600B71634 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B787D92CB998A600B71634 /* Storage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -58,6 +64,12 @@
 		756CD34A2CAAB8710055E764 /* Robokassa.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Robokassa.swift; sourceTree = "<group>"; };
 		756CD34E2CAAC31A0055E764 /* ViewParams.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewParams.swift; sourceTree = "<group>"; };
 		756CD3532CAB119C0055E764 /* Invoice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Invoice.swift; sourceTree = "<group>"; };
+		75B787CF2CB5BEA900B71634 /* Endpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
+		75B787D12CB5C7B200B71634 /* OperationResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationResponse.swift; sourceTree = "<group>"; };
+		75B787D32CB6AC9700B71634 /* OperationStateResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationStateResponse.swift; sourceTree = "<group>"; };
+		75B787D52CB9821000B71634 /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
+		75B787D72CB9872900B71634 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		75B787D92CB998A600B71634 /* Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,7 +104,9 @@
 			children = (
 				7527917A2CA86A8900FC7571 /* AppDelegate.swift */,
 				7527917C2CA86A8900FC7571 /* SceneDelegate.swift */,
+				75B787D92CB998A600B71634 /* Storage.swift */,
 				7527917E2CA86A8900FC7571 /* ViewController.swift */,
+				75B787D52CB9821000B71634 /* Button.swift */,
 				756CD34A2CAAB8710055E764 /* Robokassa.swift */,
 				756CD3292CAAB7A40055E764 /* WebViewController.swift */,
 				756CD3492CAAB7F20055E764 /* Extensions */,
@@ -120,6 +134,8 @@
 				756CD3342CAAB7AF0055E764 /* Receipt.swift */,
 				756CD3532CAB119C0055E764 /* Invoice.swift */,
 				753BA3D32CB023E900F02A97 /* PaymentResult.swift */,
+				75B787D12CB5C7B200B71634 /* OperationResponse.swift */,
+				75B787D32CB6AC9700B71634 /* OperationStateResponse.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -129,6 +145,8 @@
 			children = (
 				756CD3372CAAB7AF0055E764 /* Constants.swift */,
 				756CD3382CAAB7AF0055E764 /* NetworkManager.swift */,
+				75B787CF2CB5BEA900B71634 /* Endpoint.swift */,
+				75B787D72CB9872900B71634 /* Logger.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -222,20 +240,26 @@
 				756CD3432CAAB7AF0055E764 /* Receipt.swift in Sources */,
 				756CD3402CAAB7AF0055E764 /* PaymentMethod.swift in Sources */,
 				756CD34F2CAAC31A0055E764 /* ViewParams.swift in Sources */,
+				75B787D22CB5C7B200B71634 /* OperationResponse.swift in Sources */,
 				756CD3412CAAB7AF0055E764 /* PaymentObject.swift in Sources */,
 				756CD33E2CAAB7AF0055E764 /* CustomerParams.swift in Sources */,
+				75B787D82CB9872900B71634 /* Logger.swift in Sources */,
 				756CD34B2CAAB8710055E764 /* Robokassa.swift in Sources */,
 				756CD3452CAAB7AF0055E764 /* Constants.swift in Sources */,
 				756CD33B2CAAB7AF0055E764 /* BaseParams.swift in Sources */,
 				7527917B2CA86A8900FC7571 /* AppDelegate.swift in Sources */,
+				75B787DA2CB998A600B71634 /* Storage.swift in Sources */,
 				756CD3462CAAB7AF0055E764 /* NetworkManager.swift in Sources */,
 				753BA3D42CB023E900F02A97 /* PaymentResult.swift in Sources */,
+				75B787D62CB9821000B71634 /* Button.swift in Sources */,
 				756CD33D2CAAB7AF0055E764 /* Currency.swift in Sources */,
+				75B787D42CB6AC9700B71634 /* OperationStateResponse.swift in Sources */,
 				7527917D2CA86A8900FC7571 /* SceneDelegate.swift in Sources */,
 				756CD32A2CAAB7A40055E764 /* WebViewController.swift in Sources */,
 				756CD33F2CAAB7AF0055E764 /* OrderParams.swift in Sources */,
 				756CD33C2CAAB7AF0055E764 /* Culture.swift in Sources */,
 				756CD3422CAAB7AF0055E764 /* PaymentParams.swift in Sources */,
+				75B787D02CB5BEA900B71634 /* Endpoint.swift in Sources */,
 				756CD3542CAB119C0055E764 /* Invoice.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -387,6 +411,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -418,6 +443,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

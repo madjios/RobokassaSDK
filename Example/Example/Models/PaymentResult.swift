@@ -1,8 +1,8 @@
 import Foundation
 
 struct PaymentStatusResponse: Decodable {
-    let requestCode: PaymentResult
-    let stateCode: PaymentState
+    let requestCode: PaymentResult?
+    let stateCode: PaymentState?
     let description: String?
 }
 
