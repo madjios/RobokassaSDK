@@ -1,4 +1,4 @@
-import UIKit.UIApplication
+import UIKit
 
 extension UIApplication {
     var actualKeyWindow: UIWindow? {

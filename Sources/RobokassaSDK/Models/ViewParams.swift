@@ -1,4 +1,7 @@
+#if canImport(UIKit)
 import UIKit
+#endif
+
 
 public struct ViewParams: Codable {
     

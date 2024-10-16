@@ -1,4 +1,7 @@
+#if canImport(UIKit)
 import UIKit
+#endif
+
 import WebKit
 
 final class WebViewController: UIViewController {

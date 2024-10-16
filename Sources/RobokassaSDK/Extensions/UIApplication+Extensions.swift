@@ -1,4 +1,7 @@
+#if canImport(UIKit)
 import UIKit
+#endif
+
 
 extension UIApplication {
     var actualKeyWindow: UIWindow? {
