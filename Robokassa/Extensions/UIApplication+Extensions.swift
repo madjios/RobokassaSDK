@@ -31,9 +31,4 @@ extension UIApplication {
         
         return controller
     }
-    
-    var hasBottomNotch: Bool {
-        actualKeyWindow?.safeAreaInsets.bottom ?? 0.0 > 20.0
-    }
-    
 }
