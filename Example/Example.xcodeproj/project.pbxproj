@@ -12,27 +12,7 @@
 		7527917F2CA86A8900FC7571 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7527917E2CA86A8900FC7571 /* ViewController.swift */; };
 		752791842CA86A8A00FC7571 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 752791832CA86A8A00FC7571 /* Assets.xcassets */; };
 		752791872CA86A8A00FC7571 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 752791862CA86A8A00FC7571 /* Base */; };
-		753BA3D42CB023E900F02A97 /* PaymentResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753BA3D32CB023E900F02A97 /* PaymentResult.swift */; };
-		756CD32A2CAAB7A40055E764 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756CD3292CAAB7A40055E764 /* WebViewController.swift */; };
-		756CD33A2CAAB7AF0055E764 /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756CD32B2CAAB7AF0055E764 /* Date+Extension.swift */; };
-		756CD33B2CAAB7AF0055E764 /* BaseParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756CD32C2CAAB7AF0055E764 /* BaseParams.swift */; };
-		756CD33C2CAAB7AF0055E764 /* Culture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756CD32D2CAAB7AF0055E764 /* Culture.swift */; };
-		756CD33D2CAAB7AF0055E764 /* Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756CD32E2CAAB7AF0055E764 /* Currency.swift */; };
-		756CD33E2CAAB7AF0055E764 /* CustomerParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756CD32F2CAAB7AF0055E764 /* CustomerParams.swift */; };
-		756CD33F2CAAB7AF0055E764 /* OrderParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756CD3302CAAB7AF0055E764 /* OrderParams.swift */; };
-		756CD3402CAAB7AF0055E764 /* PaymentMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756CD3312CAAB7AF0055E764 /* PaymentMethod.swift */; };
-		756CD3412CAAB7AF0055E764 /* PaymentObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756CD3322CAAB7AF0055E764 /* PaymentObject.swift */; };
-		756CD3422CAAB7AF0055E764 /* PaymentParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756CD3332CAAB7AF0055E764 /* PaymentParams.swift */; };
-		756CD3432CAAB7AF0055E764 /* Receipt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756CD3342CAAB7AF0055E764 /* Receipt.swift */; };
-		756CD3452CAAB7AF0055E764 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756CD3372CAAB7AF0055E764 /* Constants.swift */; };
-		756CD3462CAAB7AF0055E764 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756CD3382CAAB7AF0055E764 /* NetworkManager.swift */; };
-		756CD3482CAAB7ED0055E764 /* UIApplication+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756CD3472CAAB7ED0055E764 /* UIApplication+Extensions.swift */; };
-		756CD34B2CAAB8710055E764 /* Robokassa.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756CD34A2CAAB8710055E764 /* Robokassa.swift */; };
-		756CD34F2CAAC31A0055E764 /* ViewParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756CD34E2CAAC31A0055E764 /* ViewParams.swift */; };
-		756CD3542CAB119C0055E764 /* Invoice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756CD3532CAB119C0055E764 /* Invoice.swift */; };
-		75B787D02CB5BEA900B71634 /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B787CF2CB5BEA900B71634 /* Endpoint.swift */; };
 		75B787D62CB9821000B71634 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B787D52CB9821000B71634 /* Button.swift */; };
-		75B787D82CB9872900B71634 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B787D72CB9872900B71634 /* Logger.swift */; };
 		75B787DA2CB998A600B71634 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B787D92CB998A600B71634 /* Storage.swift */; };
 /* End PBXBuildFile section */
 
@@ -44,27 +24,7 @@
 		752791832CA86A8A00FC7571 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		752791862CA86A8A00FC7571 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		752791882CA86A8A00FC7571 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		753BA3D32CB023E900F02A97 /* PaymentResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentResult.swift; sourceTree = "<group>"; };
-		756CD3292CAAB7A40055E764 /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
-		756CD32B2CAAB7AF0055E764 /* Date+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
-		756CD32C2CAAB7AF0055E764 /* BaseParams.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseParams.swift; sourceTree = "<group>"; };
-		756CD32D2CAAB7AF0055E764 /* Culture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Culture.swift; sourceTree = "<group>"; };
-		756CD32E2CAAB7AF0055E764 /* Currency.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Currency.swift; sourceTree = "<group>"; };
-		756CD32F2CAAB7AF0055E764 /* CustomerParams.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomerParams.swift; sourceTree = "<group>"; };
-		756CD3302CAAB7AF0055E764 /* OrderParams.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderParams.swift; sourceTree = "<group>"; };
-		756CD3312CAAB7AF0055E764 /* PaymentMethod.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaymentMethod.swift; sourceTree = "<group>"; };
-		756CD3322CAAB7AF0055E764 /* PaymentObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaymentObject.swift; sourceTree = "<group>"; };
-		756CD3332CAAB7AF0055E764 /* PaymentParams.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaymentParams.swift; sourceTree = "<group>"; };
-		756CD3342CAAB7AF0055E764 /* Receipt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Receipt.swift; sourceTree = "<group>"; };
-		756CD3372CAAB7AF0055E764 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
-		756CD3382CAAB7AF0055E764 /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
-		756CD3472CAAB7ED0055E764 /* UIApplication+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIApplication+Extensions.swift"; sourceTree = "<group>"; };
-		756CD34A2CAAB8710055E764 /* Robokassa.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Robokassa.swift; sourceTree = "<group>"; };
-		756CD34E2CAAC31A0055E764 /* ViewParams.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewParams.swift; sourceTree = "<group>"; };
-		756CD3532CAB119C0055E764 /* Invoice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Invoice.swift; sourceTree = "<group>"; };
-		75B787CF2CB5BEA900B71634 /* Endpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
 		75B787D52CB9821000B71634 /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
-		75B787D72CB9872900B71634 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		75B787D92CB998A600B71634 /* Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -103,55 +63,11 @@
 				75B787D92CB998A600B71634 /* Storage.swift */,
 				7527917E2CA86A8900FC7571 /* ViewController.swift */,
 				75B787D52CB9821000B71634 /* Button.swift */,
-				756CD34A2CAAB8710055E764 /* Robokassa.swift */,
-				756CD3292CAAB7A40055E764 /* WebViewController.swift */,
-				756CD3492CAAB7F20055E764 /* Extensions */,
-				756CD3362CAAB7AF0055E764 /* Models */,
-				756CD3392CAAB7AF0055E764 /* Network */,
 				752791832CA86A8A00FC7571 /* Assets.xcassets */,
 				752791852CA86A8A00FC7571 /* LaunchScreen.storyboard */,
 				752791882CA86A8A00FC7571 /* Info.plist */,
 			);
 			path = Example;
-			sourceTree = "<group>";
-		};
-		756CD3362CAAB7AF0055E764 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				756CD32C2CAAB7AF0055E764 /* BaseParams.swift */,
-				756CD32D2CAAB7AF0055E764 /* Culture.swift */,
-				756CD32E2CAAB7AF0055E764 /* Currency.swift */,
-				756CD32F2CAAB7AF0055E764 /* CustomerParams.swift */,
-				756CD3302CAAB7AF0055E764 /* OrderParams.swift */,
-				756CD3312CAAB7AF0055E764 /* PaymentMethod.swift */,
-				756CD3322CAAB7AF0055E764 /* PaymentObject.swift */,
-				756CD3332CAAB7AF0055E764 /* PaymentParams.swift */,
-				756CD34E2CAAC31A0055E764 /* ViewParams.swift */,
-				756CD3342CAAB7AF0055E764 /* Receipt.swift */,
-				756CD3532CAB119C0055E764 /* Invoice.swift */,
-				753BA3D32CB023E900F02A97 /* PaymentResult.swift */,
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
-		756CD3392CAAB7AF0055E764 /* Network */ = {
-			isa = PBXGroup;
-			children = (
-				756CD3372CAAB7AF0055E764 /* Constants.swift */,
-				756CD3382CAAB7AF0055E764 /* NetworkManager.swift */,
-				75B787CF2CB5BEA900B71634 /* Endpoint.swift */,
-				75B787D72CB9872900B71634 /* Logger.swift */,
-			);
-			path = Network;
-			sourceTree = "<group>";
-		};
-		756CD3492CAAB7F20055E764 /* Extensions */ = {
-			isa = PBXGroup;
-			children = (
-				756CD32B2CAAB7AF0055E764 /* Date+Extension.swift */,
-				756CD3472CAAB7ED0055E764 /* UIApplication+Extensions.swift */,
-			);
-			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -228,31 +144,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				756CD33A2CAAB7AF0055E764 /* Date+Extension.swift in Sources */,
-				756CD3482CAAB7ED0055E764 /* UIApplication+Extensions.swift in Sources */,
 				7527917F2CA86A8900FC7571 /* ViewController.swift in Sources */,
-				756CD3432CAAB7AF0055E764 /* Receipt.swift in Sources */,
-				756CD3402CAAB7AF0055E764 /* PaymentMethod.swift in Sources */,
-				756CD34F2CAAC31A0055E764 /* ViewParams.swift in Sources */,
-				756CD3412CAAB7AF0055E764 /* PaymentObject.swift in Sources */,
-				756CD33E2CAAB7AF0055E764 /* CustomerParams.swift in Sources */,
-				75B787D82CB9872900B71634 /* Logger.swift in Sources */,
-				756CD34B2CAAB8710055E764 /* Robokassa.swift in Sources */,
-				756CD3452CAAB7AF0055E764 /* Constants.swift in Sources */,
-				756CD33B2CAAB7AF0055E764 /* BaseParams.swift in Sources */,
 				7527917B2CA86A8900FC7571 /* AppDelegate.swift in Sources */,
 				75B787DA2CB998A600B71634 /* Storage.swift in Sources */,
-				756CD3462CAAB7AF0055E764 /* NetworkManager.swift in Sources */,
-				753BA3D42CB023E900F02A97 /* PaymentResult.swift in Sources */,
 				75B787D62CB9821000B71634 /* Button.swift in Sources */,
-				756CD33D2CAAB7AF0055E764 /* Currency.swift in Sources */,
 				7527917D2CA86A8900FC7571 /* SceneDelegate.swift in Sources */,
-				756CD32A2CAAB7A40055E764 /* WebViewController.swift in Sources */,
-				756CD33F2CAAB7AF0055E764 /* OrderParams.swift in Sources */,
-				756CD33C2CAAB7AF0055E764 /* Culture.swift in Sources */,
-				756CD3422CAAB7AF0055E764 /* PaymentParams.swift in Sources */,
-				75B787D02CB5BEA900B71634 /* Endpoint.swift in Sources */,
-				756CD3542CAB119C0055E764 /* Invoice.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

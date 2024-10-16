@@ -1,4 +1,5 @@
 import UIKit
+//import RobokassaSDK
 
 final class ViewController: UIViewController {
     
@@ -35,7 +36,7 @@ final class ViewController: UIViewController {
     private let simplePaymentButton: Button = {
         let button = Button()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle(PaymentType.simplePayment.title, for: .normal)
+//        button.setTitle(Robokassa.PaymentType.simplePayment.title, for: .normal)
         
         return button
     }()
@@ -43,7 +44,7 @@ final class ViewController: UIViewController {
     private let holdingButton: Button = {
         let button = Button()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle(PaymentType.holding.title, for: .normal)
+//        button.setTitle(PaymentType.holding.title, for: .normal)
         
         return button
     }()
@@ -51,7 +52,7 @@ final class ViewController: UIViewController {
     private let confirmHoldingButton: Button = {
         let button = Button()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle(PaymentType.confirmHolding.title, for: .normal)
+//        button.setTitle(PaymentType.confirmHolding.title, for: .normal)
         
         return button
     }()
@@ -59,7 +60,7 @@ final class ViewController: UIViewController {
     private let cancelHoldingButton: Button = {
         let button = Button()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle(PaymentType.cancelHolding.title, for: .normal)
+//        button.setTitle(PaymentType.cancelHolding.title, for: .normal)
         
         return button
     }()
@@ -67,7 +68,7 @@ final class ViewController: UIViewController {
     private let reccurentPaymentButton: Button = {
         let button = Button()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle(PaymentType.reccurentPayment.title, for: .normal)
+//        button.setTitle(PaymentType.reccurentPayment.title, for: .normal)
         
         return button
     }()
@@ -109,12 +110,12 @@ fileprivate extension ViewController {
         
         simplePaymentButton.addAction(.init(handler: { [weak self] _ in
             self?.simplePaymentButton.isLoading = true
-            self?.routeToWebView(with: .simplePayment)
+//            self?.routeToWebView(with: .simplePayment)
         }), for: .touchUpInside)
         
         holdingButton.addAction(.init(handler: { [weak self] _ in
             self?.holdingButton.isLoading = true
-            self?.routeToWebView(with: .holding)
+//            self?.routeToWebView(with: .holding)
         }), for: .touchUpInside)
         
         confirmHoldingButton.addAction(.init(handler: { [weak self] _ in
@@ -132,101 +133,101 @@ fileprivate extension ViewController {
         }), for: .touchUpInside)
     }
     
-    func routeToWebView(with type: PaymentType) {
-        switch type {
-        case .simplePayment:
-            createRobokassa().startSimplePayment(with: createParams())
-        case .holding:
-            createRobokassa().startHoldingPayment(with: createParams())
-        case .reccurentPayment:
-            createRobokassa().startDefaultReccurentPayment(with: createParams())
-        default:
-            break
-        }
-    }
+//    func routeToWebView(with type: PaymentType) {
+//        switch type {
+//        case .simplePayment:
+//            createRobokassa().startSimplePayment(with: createParams())
+//        case .holding:
+//            createRobokassa().startHoldingPayment(with: createParams())
+//        case .reccurentPayment:
+//            createRobokassa().startDefaultReccurentPayment(with: createParams())
+//        default:
+//            break
+//        }
+//    }
 }
 
 // MARK: - Privates -
 
 fileprivate extension ViewController {
     func didTapConfirmHolding() {
-        createRobokassa()
-            .confirmHoldingPayment(with: createParams()) { [weak self] result in
-                self?.confirmHoldingButton.isLoading = false
-                
-                switch result {
-                case let .success(response):
-                    print("SUCCESSFULLY CONFIRMED HOLDING PAYMENT. Response: \(response)")
-                case let .failure(error):
-                    print(error.localizedDescription)
-                }
-            }
+//        createRobokassa()
+//            .confirmHoldingPayment(with: createParams()) { [weak self] result in
+//                self?.confirmHoldingButton.isLoading = false
+//                
+//                switch result {
+//                case let .success(response):
+//                    print("SUCCESSFULLY CONFIRMED HOLDING PAYMENT. Response: \(response)")
+//                case let .failure(error):
+//                    print(error.localizedDescription)
+//                }
+//            }
     }
     
     func didTapCancelHolding() {
-        createRobokassa()
-            .cancelHoldingPayment(with: createParams()) { [weak self] result in
-                self?.cancelHoldingButton.isLoading = false
-                
-                switch result {
-                case let .success(response):
-                    print("SUCCESSFULLY CANCELLED HOLDING PAYMENT. Response: \(response)")
-                case let .failure(error):
-                    print(error.localizedDescription)
-                }
-            }
+//        createRobokassa()
+//            .cancelHoldingPayment(with: createParams()) { [weak self] result in
+//                self?.cancelHoldingButton.isLoading = false
+//                
+//                switch result {
+//                case let .success(response):
+//                    print("SUCCESSFULLY CANCELLED HOLDING PAYMENT. Response: \(response)")
+//                case let .failure(error):
+//                    print(error.localizedDescription)
+//                }
+//            }
     }
     
     func didTapRecurrent() {
-        if let previousOrderId = storage.previoudOrderId {
-            var params = createParams()
-            params.order.previousInvoiceId = previousOrderId
-            createRobokassa().startReccurentPayment(with: params) { result in
-                switch result {
-                case let .success(response):
-                    print("SUCCESSFULLY FINISHED RECURRENT PAYMENT. Response: \(response)")
-                case let .failure(error):
-                    print(error.localizedDescription)
-                }
-            }
-        } else {
-            routeToWebView(with: .reccurentPayment)
-        }
+//        if let previousOrderId = storage.previoudOrderId {
+//            var params = createParams()
+//            params.order.previousInvoiceId = previousOrderId
+//            createRobokassa().startReccurentPayment(with: params) { result in
+//                switch result {
+//                case let .success(response):
+//                    print("SUCCESSFULLY FINISHED RECURRENT PAYMENT. Response: \(response)")
+//                case let .failure(error):
+//                    print(error.localizedDescription)
+//                }
+//            }
+//        } else {
+//            routeToWebView(with: .reccurentPayment)
+//        }
     }
     
-    func createRobokassa() -> Robokassa {
-        Robokassa(
-            invoiceId: textField.text ?? "",
-            login: Constants.MERCHANT,
-            password: Constants.PWD_1,
-            password2: Constants.PWD_2,
-            isTesting: false
-        )
-    }
+//    func createRobokassa() -> Robokassa {
+//        Robokassa(
+//            invoiceId: textField.text ?? "",
+//            login: Constants.MERCHANT,
+//            password: Constants.PWD_1,
+//            password2: Constants.PWD_2,
+//            isTesting: false
+//        )
+//    }
     
-    func createParams() -> PaymentParams {
-        PaymentParams(
-            order: .init(
-                invoiceId: Int(textField.text ?? "") ?? 0,
-                orderSum: 1.0,
-                description: "Test simple pay",
-                expirationDate: Date().dateByAdding(.day, value: 1),
-                receipt: .init(
-                    items: [
-                        .init(
-                            name: "Ботинки детские",
-                            sum: 1.0,
-                            quantity: 1,
-                            paymentMethod: .fullPayment,
-                            tax: .NONE
-                        )
-                    ]
-                )
-            ),
-            customer: .init(culture: .ru, email: "iammadj.u@gmail.com"),
-            view: .init(toolbarText: "Простая оплата", hasToolbar: true)
-        )
-    }
+//    func createParams() -> PaymentParams {
+//        PaymentParams(
+//            order: .init(
+//                invoiceId: Int(textField.text ?? "") ?? 0,
+//                orderSum: 1.0,
+//                description: "Test simple pay",
+//                expirationDate: Date().dateByAdding(.day, value: 1),
+//                receipt: .init(
+//                    items: [
+//                        .init(
+//                            name: "Ботинки детские",
+//                            sum: 1.0,
+//                            quantity: 1,
+//                            paymentMethod: .fullPayment,
+//                            tax: .NONE
+//                        )
+//                    ]
+//                )
+//            ),
+//            customer: .init(culture: .ru, email: "iammadj.u@gmail.com"),
+//            view: .init(toolbarText: "Простая оплата", hasToolbar: true)
+//        )
+//    }
 }
 
 // MARK: - Setup subviews -
