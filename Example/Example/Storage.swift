@@ -10,10 +10,16 @@ final class Storage {
             userDefaults.set(newValue, forKey: Keys.previousOrderId.key)
         }
     }
+    
+    func removeCache() {
+        Keys.allCases.forEach {
+            userDefaults.removeObject(forKey: $0.key)
+        }
+    }
 }
 
 fileprivate extension Storage {
-    enum Keys: String {
+    enum Keys: String, CaseIterable {
         case previousOrderId = "app.prev.order.id"
         
         var key: String { rawValue }

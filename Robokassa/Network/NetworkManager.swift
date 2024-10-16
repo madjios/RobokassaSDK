@@ -53,7 +53,11 @@ final class RequestManager {
             if let object = try? Mapper().mapToObject(from: data, type: T.self) {
                 return object
             } else {
-                throw MessagedError(message: "Could not parse any valid JSON either XML")
+                if let object = try? JSONSerialization.jsonObject(with: data) as? T {
+                    return object
+                } else {
+                    throw MessagedError(message: "Could not parse any valid JSON either XML")
+                }
             }
         } catch {
             throw error

@@ -1,12 +1,6 @@
 import Foundation
 
-struct PaymentStatusResponse: Decodable {
-    let requestCode: PaymentResult?
-    let stateCode: PaymentState?
-    let description: String?
-}
-
-enum PaymentResult: String, Decodable {
+public enum PaymentResult: String, Decodable {
     case checking = "-1"
     case success = "0"
     case signatureError = "1"
@@ -15,8 +9,9 @@ enum PaymentResult: String, Decodable {
     case invoiceDoubleError = "4"
     case timeoutError = "999"
     case serverError = "1000"
+    case notFound
     
-    var title: String {
+    public var title: String {
         return switch self {
         case .checking:
             "Идет обработка запроса"
@@ -34,6 +29,8 @@ enum PaymentResult: String, Decodable {
             "Операция прервана по таймауту"
         case .serverError:
             "Внитренняя ошибка сервиса"
+        case .notFound:
+            "Невозможно преобразовать полученный код статуса платежа"
         }
     }
 }
@@ -47,6 +44,7 @@ enum PaymentState: String, Decodable {
     case paymentPayback = "60"
     case paymentStopped = "80"
     case paymentSuccess = "100"
+    case notFound
     
     var title: String {
         return switch self {
@@ -66,6 +64,8 @@ enum PaymentState: String, Decodable {
             "Исполнение операции приостановлено. Внештатная остановка. Произошла внештатная ситуация в процессе совершения операции (недоступны платежные интерфейсы в системе, из которой/в которую совершался платёж и т.д.). Или операция была приостановлена в системой безопасности. Операции, находящиеся в этом состоянии, разбираются нашей службой поддержки в ручном режиме"
         case .paymentSuccess:
             "Платёж проведён успешно, деньеи зачислены на баланс продавца, уведомление об успешном платеже отправлено"
+        case .notFound:
+            "Невозможно преобразовать полученный код состояния платежа"
         }
     }
 }

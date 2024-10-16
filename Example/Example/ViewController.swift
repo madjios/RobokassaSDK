@@ -133,16 +133,13 @@ fileprivate extension ViewController {
     }
     
     func routeToWebView(with type: PaymentType) {
-        let paymentParams = createParams()
-        let robokassa = createRobokassa()
-        
         switch type {
         case .simplePayment:
-            robokassa.startSimplePayment(with: paymentParams)
+            createRobokassa().startSimplePayment(with: createParams())
         case .holding:
-            robokassa.startHoldingPayment(with: paymentParams)
+            createRobokassa().startHoldingPayment(with: createParams())
         case .reccurentPayment:
-            robokassa.startDefaultReccurentPayment(with: paymentParams)
+            createRobokassa().startDefaultReccurentPayment(with: createParams())
         default:
             break
         }
@@ -199,6 +196,7 @@ fileprivate extension ViewController {
     
     func createRobokassa() -> Robokassa {
         Robokassa(
+            invoiceId: textField.text ?? "",
             login: Constants.MERCHANT,
             password: Constants.PWD_1,
             password2: Constants.PWD_2,
@@ -209,7 +207,7 @@ fileprivate extension ViewController {
     func createParams() -> PaymentParams {
         PaymentParams(
             order: .init(
-                invoiceId: Int(textField.text ?? "") ?? Int.random(in: 1..<999999),
+                invoiceId: Int(textField.text ?? "") ?? 0,
                 orderSum: 1.0,
                 description: "Test simple pay",
                 expirationDate: Date().dateByAdding(.day, value: 1),

@@ -1,6 +1,6 @@
 import Foundation
 
-enum Currency: String, Codable {
+public enum Currency: String, Codable {
     case usd
     case eur
     case kzt

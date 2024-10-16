@@ -1,4 +1,4 @@
-enum PaymentMethod: String, Codable {
+public enum PaymentMethod: String, Codable {
     /// Предоплата 100%. Полная предварительная оплата до момента передачи предмета расчёта.
     case fullPrepayment = "full_prepayment"
     

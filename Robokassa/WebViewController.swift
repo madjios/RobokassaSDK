@@ -1,9 +1,11 @@
 import UIKit
 import WebKit
 
-class WebViewController: UIViewController {
+final class WebViewController: UIViewController {
     
     // MARK: - Properties -
+    
+    private let storage = Storage()
     
     private var webView: WKWebView!
     private var timer: Timer?
@@ -126,21 +128,53 @@ fileprivate extension WebViewController {
             do {
                 let result = try await RequestManager.shared.request(to: .checkPaymentStatus(params))
                 
-                if let value = result["Code"] as? String, value == "0" {
-                    invalidateTimer()
-                    onSucccessHandler?()
-                } else {
-                    if let value = result["Result"] as? String, value == "0" {
-                        invalidateTimer()
-                        onSucccessHandler?()
+                if paymentType == .simplePayment {
+                    if let value = result["Code"] as? String {
+                        let codeType = PaymentResult(rawValue: value) ?? .notFound
+                        
+                        if codeType == .success {
+                            invalidateTimer()
+                            onSucccessHandler?()
+                        } else {
+                            onFailureHandler?(codeType.title)
+                        }
+                        
+                        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
+                            self.didTapBack()
+                        }
                     } else {
                         handleFailureState(result)
+                        
+                        if seconds < 1 {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
+                                self.didTapBack()
+                            }
+                        }
                     }
-                }
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
-                    self.didTapBack()
-                }
+                } else if paymentType == .holding || paymentType == .reccurentPayment {
+                    if let value = result["Result"] as? String {
+                        let codeType = PaymentResult(rawValue: value) ?? .notFound
+                        
+                        if codeType == .success {
+                            invalidateTimer()
+                            onSucccessHandler?()
+                        } else {
+                            onFailureHandler?(codeType.title)
+                        }
+                        
+                        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
+                            self.didTapBack()
+                        }
+                    } else {
+                        handleFailureState(result)
+                        
+                        if seconds < 1 {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
+                                self.didTapBack()
+                            }
+                        }
+                    }
+                } 
             } catch {
                 invalidateTimer()
                 onFailureHandler?(error.localizedDescription)

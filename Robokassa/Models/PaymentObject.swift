@@ -1,4 +1,4 @@
-enum PaymentObject: String, Codable {
+public enum PaymentObject: String, Codable {
     /// Товар. О реализуемом товаре, за исключением подакцизного товара (наименование и иные сведения, описывающие товар).
     case commodity = "commodity"
     

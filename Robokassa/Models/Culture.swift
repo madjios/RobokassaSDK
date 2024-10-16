@@ -1,6 +1,6 @@
 import Foundation
 
-enum Culture: String, Codable {
+public enum Culture: String, Codable {
     case eng
     case ru
     

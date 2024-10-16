@@ -1,13 +1,13 @@
 import UIKit
 
-enum PaymentType {
+public enum PaymentType {
     case simplePayment
     case holding
     case confirmHolding
     case cancelHolding
     case reccurentPayment
     
-    var title: String {
+    public var title: String {
         switch self {
         case .simplePayment: "Простая оплата"
         case .holding: "Холдирование"
@@ -16,32 +16,24 @@ enum PaymentType {
         case .reccurentPayment: "Реккурентная оплата"
         }
     }
-    
-    func getURLPath(with invoiceID: String) -> String {
-        switch self {
-        case .simplePayment: Constants.URLs.simplePayment + invoiceID
-        case .holding: Constants.URLs.simplePayment + invoiceID
-        case .confirmHolding: Constants.URLs.holdingConfirm + invoiceID
-        case .cancelHolding: Constants.URLs.holdingCancel + invoiceID
-        case .reccurentPayment: Constants.URLs.recurringPayment + invoiceID
-        }
-    }
 }
 
-class Robokassa {
+public final class Robokassa {
+    private(set) var invoiceId: String
     private(set) var login: String
     private(set) var password: String
     private(set) var password2: String
     private(set) var isTesting: Bool
     
-    init(login: String, password: String, password2: String, isTesting: Bool = false) {
+    public init(invoiceId: String, login: String, password: String, password2: String, isTesting: Bool = false) {
+        self.invoiceId = invoiceId
         self.login = login
         self.password = password
         self.password2 = password2
         self.isTesting = isTesting
     }
     
-    func startSimplePayment(with params: PaymentParams) {
+    public func startSimplePayment(with params: PaymentParams) {
         var params = params
         params.merchantLogin = login
         params.password1 = password
@@ -49,7 +41,7 @@ class Robokassa {
         fetchInvoice(with: params, paymentType: .simplePayment)
     }
     
-    func startHoldingPayment(with params: PaymentParams) {
+    public func startHoldingPayment(with params: PaymentParams) {
         var params = params
         params.merchantLogin = login
         params.password1 = password
@@ -58,7 +50,7 @@ class Robokassa {
         fetchInvoice(with: params, paymentType: .holding)
     }
     
-    func confirmHoldingPayment(with params: PaymentParams, completion: @escaping (Result<Bool, Error>) -> Void) {
+    public func confirmHoldingPayment(with params: PaymentParams, completion: @escaping (Result<Bool, Error>) -> Void) {
         var params = params
         params.merchantLogin = login
         params.password1 = password
@@ -67,7 +59,7 @@ class Robokassa {
         requestConfirmHoldingPayment(with: params, completion: completion)
     }
     
-    func confirmHoldingPayment(with params: PaymentParams) async throws -> Bool {
+    public func confirmHoldingPayment(with params: PaymentParams) async throws -> Bool {
         var params = params
         params.merchantLogin = login
         params.password1 = password
@@ -77,7 +69,7 @@ class Robokassa {
         return try await requestConfirmHoldingPayment(with: params)
     }
     
-    func cancelHoldingPayment(with params: PaymentParams, completion: @escaping (Result<Bool, Error>) -> Void) {
+    public func cancelHoldingPayment(with params: PaymentParams, completion: @escaping (Result<Bool, Error>) -> Void) {
         var params = params
         params.merchantLogin = login
         params.password1 = password
@@ -86,7 +78,7 @@ class Robokassa {
         requestHoldingPaymentCancellation(with: params, completion: completion)
     }
     
-    func cancelHoldingPayment(with params: PaymentParams) async throws -> Bool {
+    public func cancelHoldingPayment(with params: PaymentParams) async throws -> Bool {
         var params = params
         params.merchantLogin = login
         params.password1 = password
@@ -96,7 +88,7 @@ class Robokassa {
         return try await requestHoldingPaymentCancellation(with: params)
     }
     
-    func startDefaultReccurentPayment(with params: PaymentParams) {
+    public func startDefaultReccurentPayment(with params: PaymentParams) {
         var params = params
         params.merchantLogin = login
         params.password1 = password
@@ -105,7 +97,7 @@ class Robokassa {
         fetchInvoice(with: params, paymentType: .reccurentPayment)
     }
     
-    func startReccurentPayment(with params: PaymentParams, completion: @escaping (Result<Bool, Error>) -> Void) {
+    public func startReccurentPayment(with params: PaymentParams, completion: @escaping (Result<Bool, Error>) -> Void) {
         var params = params
         params.merchantLogin = login
         params.password1 = password
@@ -114,7 +106,7 @@ class Robokassa {
         requestRecurrentPayment(with: params, completion: completion)
     }
     
-    func startReccurentPayment(with params: PaymentParams) async throws -> Bool {
+    public func startReccurentPayment(with params: PaymentParams) async throws -> Bool {
         var params = params
         params.merchantLogin = login
         params.password1 = password
@@ -143,7 +135,7 @@ fileprivate extension Robokassa {
         Task { @MainActor in
             do {
                 let response = try await RequestManager.shared.request(to: .confirmHoldPayment(params), type: String.self)
-                let result = response.contains("true")
+                let result = response.lowercased().contains("true")
                 completion(.success(result))
             } catch {
                 print(error.localizedDescription)
@@ -154,14 +146,14 @@ fileprivate extension Robokassa {
     
     func requestConfirmHoldingPayment(with params: PaymentParams) async throws -> Bool {
         let response = try await RequestManager.shared.request(to: .confirmHoldPayment(params), type: String.self)
-        return response.contains("true")
+        return response.lowercased().contains("true")
     }
     
     func requestHoldingPaymentCancellation(with params: PaymentParams, completion: @escaping (Result<Bool, Error>) -> Void) {
         Task { @MainActor in
             do {
                 let response = try await RequestManager.shared.request(to: .cancelHoldPayment(params), type: String.self)
-                let result = response.contains("true")
+                let result = response.lowercased().contains("true")
                 completion(.success(result))
             } catch {
                 print(error.localizedDescription)
@@ -172,14 +164,14 @@ fileprivate extension Robokassa {
     
     func requestHoldingPaymentCancellation(with params: PaymentParams) async throws -> Bool {
         let response = try await RequestManager.shared.request(to: .cancelHoldPayment(params), type: String.self)
-        return response.contains("true")
+        return response.lowercased().contains("true")
     }
     
     func requestRecurrentPayment(with params: PaymentParams, completion: @escaping (Result<Bool, Error>) -> Void) {
         Task { @MainActor in
             do {
                 let response = try await RequestManager.shared.request(to: .reccurentPayment(params), type: String.self)
-                let result = response.contains("true")
+                let result = response.lowercased().contains("ok")
                 completion(.success(result))
             } catch {
                 print(error.localizedDescription)
@@ -190,11 +182,16 @@ fileprivate extension Robokassa {
     
     func requestRecurrentPayment(with params: PaymentParams) async throws -> Bool {
         let response = try await RequestManager.shared.request(to: .reccurentPayment(params), type: String.self)
-        return response.contains("true")
+        return response.lowercased().contains("ok")
     }
     
     func pushWebView(with invoiceId: String, params: PaymentParams, paymentType: PaymentType) {
-        let webView = WebViewController(invoiceId: invoiceId, params: params, paymentType: paymentType, isTesting: isTesting)
+        let webView = WebViewController(
+            invoiceId: invoiceId,
+            params: params,
+            paymentType: paymentType,
+            isTesting: isTesting
+        )
         
         if UIApplication.shared.topViewController()?.navigationController == nil {
             let navController = UINavigationController(rootViewController: webView)

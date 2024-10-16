@@ -1,37 +1,37 @@
 import Foundation
 
-struct Receipt: Codable {
+public struct Receipt: Codable {
     /// Система налогообложения. Необязательное поле, если у организации имеется только один тип налогообложения.
     /// (Данный параметр обязательно задается в личном кабинете магазина).
-    let sno: TaxSystem?
+    public let sno: TaxSystem?
     
     /// Массив данных о позициях чека.
-    let items: [ReceiptItem]
+    public let items: [ReceiptItem]
     
-    init(sno: TaxSystem? = nil, items: [ReceiptItem]) {
+    public init(sno: TaxSystem? = nil, items: [ReceiptItem]) {
         self.sno = sno
         self.items = items
     }
 }
 
 // Assuming PaymentMethod, PaymentObject, and Tax are already defined in your Swift code
-struct ReceiptItem: Codable {
+public struct ReceiptItem: Codable {
     /**
      * Обязательное поле. Наименование товара. Строка, максимальная длина 128 символа.
      * Если в наименовании товара Вы используете специальные символы, например кавычки,
      * то их обязательно необходимо экранировать.
      */
-    let name: String
+    public let name: String
     
     /**
      * Обязательное поле. Полная сумма в рублях за итоговое количество данного товара с учетом всех возможных скидок,
      * бонусов и специальных цен. Десятичное положительное число: целая часть не более 8 знаков,
      * дробная часть не более 2 знаков.
      */
-    let sum: Double
+    public let sum: Double
     
     /** Обязательное поле. Количество товаров. */
-    let quantity: Int
+    public let quantity: Int
     
     /**
      * Необязательное поле. Полная сумма в рублях за единицу товара с учетом всех возможных скидок,
@@ -39,34 +39,34 @@ struct ReceiptItem: Codable {
      * дробная часть не более 2 знаков. Параметр можно передавать вместо параметра sum.При передаче
      * параметра общая сумма товарных позиций рассчитывается по формуле (cost*quantity)=sum.
      */
-    let cost: Double?
+    public let cost: Double?
     
     /**
      * Маркировка товара, передаётся в том виде, как она напечатана на упаковке товара.
      * Параметр является обязательным только для тех магазинов, которые продают товары подлежащие обязательной маркировке.
      * Код маркировки расположен на упаковке товара, рядом со штрих-кодом или в виде QR-кода.
      */
-    let nomenclatureCode: String?
+    public let nomenclatureCode: String?
     
     /**
      * Признак способа расчёта. Этот параметр необязательный. Если этот параметр не передан клиентом,
      * то в чеке будет указано значение параметра по умолчанию из Личного кабинета.
      */
-    let paymentMethod: PaymentMethod?
+    public let paymentMethod: PaymentMethod?
     
     /**
      * Признак предмета расчёта. Этот параметр необязательный. Если этот параметр не передан клиентом,
      * то в чеке будет указано значение параметра по умолчанию из Личного кабинета.
      */
-    let paymentObject: PaymentObject?
+    public let paymentObject: PaymentObject?
     
     /**
      * Обязательное поле. Это поле устанавливает налоговую ставку в ККТ.
      * Определяется для каждого вида товара по отдельности, но за все единицы конкретного товара вместе.
      */
-    let tax: Tax?
+    public let tax: Tax?
     
-    init(
+    public init(
         name: String,
         sum: Double,
         quantity: Int,
@@ -87,7 +87,7 @@ struct ReceiptItem: Codable {
     }
 }
 
-enum TaxSystem: String, Codable {
+public enum TaxSystem: String, Codable {
     /** Общая СН. */
     case OSN = "osn"
     
@@ -104,7 +104,7 @@ enum TaxSystem: String, Codable {
     case PATENT = "patent"
 }
 
-enum Tax: String, Codable {
+public enum Tax: String, Codable {
     /** Без НДС. */
     case NONE = "none"
     

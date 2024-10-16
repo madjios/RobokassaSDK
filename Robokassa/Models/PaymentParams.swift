@@ -1,7 +1,7 @@
 import Foundation
 import CryptoKit
 
-struct PaymentParams: BaseParams, Codable {
+public struct PaymentParams: BaseParams, Codable {
     var merchantLogin: String = ""
     var password1: String = ""
     var password2: String = ""
@@ -16,7 +16,7 @@ struct PaymentParams: BaseParams, Codable {
     var view: ViewParams
 }
 
-extension PaymentParams {
+public extension PaymentParams {
     var checkPaymentParams: String {
         var result = "MerchantLogin=\(merchantLogin)"
         var signature = merchantLogin
