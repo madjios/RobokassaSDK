@@ -1,5 +1,5 @@
 import UIKit
-//import RobokassaSDK
+import RobokassaSDK
 
 final class ViewController: UIViewController {
     
@@ -36,7 +36,7 @@ final class ViewController: UIViewController {
     private let simplePaymentButton: Button = {
         let button = Button()
         button.translatesAutoresizingMaskIntoConstraints = false
-//        button.setTitle(Robokassa.PaymentType.simplePayment.title, for: .normal)
+        button.setTitle(RobokassaSDK.PaymentType.simplePayment.title, for: .normal)
         
         return button
     }()
@@ -52,7 +52,7 @@ final class ViewController: UIViewController {
     private let confirmHoldingButton: Button = {
         let button = Button()
         button.translatesAutoresizingMaskIntoConstraints = false
-//        button.setTitle(PaymentType.confirmHolding.title, for: .normal)
+        button.setTitle(RobokassaSDK.PaymentType.confirmHolding.title, for: .normal)
         
         return button
     }()
@@ -60,7 +60,7 @@ final class ViewController: UIViewController {
     private let cancelHoldingButton: Button = {
         let button = Button()
         button.translatesAutoresizingMaskIntoConstraints = false
-//        button.setTitle(PaymentType.cancelHolding.title, for: .normal)
+        button.setTitle(RobokassaSDK.PaymentType.cancelHolding.title, for: .normal)
         
         return button
     }()
@@ -68,7 +68,7 @@ final class ViewController: UIViewController {
     private let reccurentPaymentButton: Button = {
         let button = Button()
         button.translatesAutoresizingMaskIntoConstraints = false
-//        button.setTitle(PaymentType.reccurentPayment.title, for: .normal)
+        button.setTitle(RobokassaSDK.PaymentType.reccurentPayment.title, for: .normal)
         
         return button
     }()
@@ -133,7 +133,7 @@ fileprivate extension ViewController {
         }), for: .touchUpInside)
     }
     
-//    func routeToWebView(with type: PaymentType) {
+    func routeToWebView(with type: RobokassaSDK.PaymentType) {
 //        switch type {
 //        case .simplePayment:
 //            createRobokassa().startSimplePayment(with: createParams())
@@ -144,7 +144,7 @@ fileprivate extension ViewController {
 //        default:
 //            break
 //        }
-//    }
+    }
 }
 
 // MARK: - Privates -
@@ -195,11 +195,11 @@ fileprivate extension ViewController {
 //        }
     }
     
-//    func createRobokassa() -> Robokassa {
+//    func createRobokassa() -> RobokassaSDK.Robokassa {
 //        Robokassa(
 //            invoiceId: textField.text ?? "",
-//            login: Constants.MERCHANT,
-//            password: Constants.PWD_1,
+//            login: "ipolh.com",
+//            password: "X7SlyJ9I4z50JpaiKCjj",
 //            password2: Constants.PWD_2,
 //            isTesting: false
 //        )

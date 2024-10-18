@@ -99,7 +99,7 @@ fileprivate extension WebViewController {
         if let url = URL(string: Constants.URLs.simplePayment + invoiceId) {
             var request = URLRequest(url: url)
             request.httpMethod = HTTPMethod.post.rawValue
-            request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+            request.setValue(Constants.FORM_URL_ENCODED, forHTTPHeaderField: "Content-Type")
             webView.load(request)
         }
     }

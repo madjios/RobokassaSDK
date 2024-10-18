@@ -96,7 +96,7 @@ final class RequestManager {
         request.httpMethod = endpoint.method.rawValue
         
         if let stringBody = endpoint.stringBody {
-            request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+            request.setValue(Constants.FORM_URL_ENCODED, forHTTPHeaderField: "Content-Type")
             request.httpBody = stringBody.data(using: .utf8)
         }
         

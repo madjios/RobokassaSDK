@@ -14,6 +14,7 @@
 		752791872CA86A8A00FC7571 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 752791862CA86A8A00FC7571 /* Base */; };
 		75B787D62CB9821000B71634 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B787D52CB9821000B71634 /* Button.swift */; };
 		75B787DA2CB998A600B71634 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B787D92CB998A600B71634 /* Storage.swift */; };
+		75CBB81A2CC2381700DF507E /* RobokassaSDK in Frameworks */ = {isa = PBXBuildFile; productRef = 75CBB8192CC2381700DF507E /* RobokassaSDK */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +34,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				75CBB81A2CC2381700DF507E /* RobokassaSDK in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -87,6 +89,7 @@
 			);
 			name = Example;
 			packageProductDependencies = (
+				75CBB8192CC2381700DF507E /* RobokassaSDK */,
 			);
 			productName = Example;
 			productReference = 752791772CA86A8900FC7571 /* Example.app */;
@@ -117,6 +120,7 @@
 			);
 			mainGroup = 7527916E2CA86A8900FC7571;
 			packageReferences = (
+				75CBB8182CC2381700DF507E /* XCRemoteSwiftPackageReference "RobokassaSDK" */,
 			);
 			productRefGroup = 752791782CA86A8900FC7571 /* Products */;
 			projectDirPath = "";
@@ -371,6 +375,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		75CBB8182CC2381700DF507E /* XCRemoteSwiftPackageReference "RobokassaSDK" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/madjios/RobokassaSDK.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		75CBB8192CC2381700DF507E /* RobokassaSDK */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 75CBB8182CC2381700DF507E /* XCRemoteSwiftPackageReference "RobokassaSDK" */;
+			productName = RobokassaSDK;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 7527916F2CA86A8900FC7571 /* Project object */;
 }

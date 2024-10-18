@@ -1,6 +1,6 @@
 import Foundation
 
-enum Constants {
+public enum Constants {
     static let EXTRA_ERROR = "com.robokassa.PAY_ERROR"
     static let EXTRA_PARAMS = "com.robokassa.PAYMENT_PARAMS"
     static let EXTRA_INVOICE_ID = "com.robokassa.PAYMENT_INVOICE_ID"
@@ -14,11 +14,11 @@ enum Constants {
     static let syncServerTimeDefault: Int64 = 2000
     static let syncServerTimeoutDefault: Int64 = 40000
     
-    static let MERCHANT = "ipolh.com"
-    static let PWD_1 = "X7SlyJ9I4z50JpaiKCjj"
-    static let PWD_2 = "Y7t35UJPLS4IZAAan7SP"
-    static let PWD_TEST_1 = "o1zCrG7EHdB6TYPkt0K5"
-    static let PWD_TEST_2 = "zgxF4Vf1oAv4k3uR7rZT"
+    public static let MERCHANT = "ipolh.com"
+    public static let PWD_1 = "X7SlyJ9I4z50JpaiKCjj"
+    public static let PWD_2 = "Y7t35UJPLS4IZAAan7SP"
+    public static let PWD_TEST_1 = "o1zCrG7EHdB6TYPkt0K5"
+    public static let PWD_TEST_2 = "zgxF4Vf1oAv4k3uR7rZT"
 }
 
 // MARK: - URLs -
