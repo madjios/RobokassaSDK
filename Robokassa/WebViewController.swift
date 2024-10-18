@@ -4,9 +4,7 @@ import WebKit
 final class WebViewController: UIViewController {
     
     // MARK: - Properties -
-    
-    private let storage = Storage()
-    
+        
     private var webView: WKWebView!
     private var timer: Timer?
     
@@ -44,7 +42,10 @@ final class WebViewController: UIViewController {
         view.backgroundColor = .white
         
         let preferences = WKWebpagePreferences()
-        preferences.allowsContentJavaScript = true
+        
+        if #available(iOS 14.0, *) {
+            preferences.allowsContentJavaScript = true
+        }
         
         let config = WKWebViewConfiguration()
         config.defaultWebpagePreferences = preferences

@@ -8,13 +8,51 @@
 
 /* Begin PBXBuildFile section */
 		75B3A6342CA52B29007C9098 /* Robokassa.h in Headers */ = {isa = PBXBuildFile; fileRef = 75B3A6332CA52B29007C9098 /* Robokassa.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		75B3A63B2CA52B46007C9098 /* Starter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B3A63A2CA52B46007C9098 /* Starter.swift */; };
+		75B787FC2CC2314200B71634 /* BaseParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B787E82CC2314200B71634 /* BaseParams.swift */; };
+		75B787FD2CC2314200B71634 /* PaymentMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B787EE2CC2314200B71634 /* PaymentMethod.swift */; };
+		75B787FE2CC2314200B71634 /* Invoice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B787EC2CC2314200B71634 /* Invoice.swift */; };
+		75B787FF2CC2314200B71634 /* Receipt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B787F22CC2314200B71634 /* Receipt.swift */; };
+		75B788002CC2314200B71634 /* Robokassa.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B787FA2CC2314200B71634 /* Robokassa.swift */; };
+		75B788012CC2314200B71634 /* CustomerParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B787EB2CC2314200B71634 /* CustomerParams.swift */; };
+		75B788022CC2314200B71634 /* PaymentParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B787F02CC2314200B71634 /* PaymentParams.swift */; };
+		75B788032CC2314200B71634 /* UIApplication+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B787E62CC2314200B71634 /* UIApplication+Extensions.swift */; };
+		75B788042CC2314200B71634 /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B787E52CC2314200B71634 /* Date+Extension.swift */; };
+		75B788052CC2314200B71634 /* PaymentResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B787F12CC2314200B71634 /* PaymentResult.swift */; };
+		75B788062CC2314200B71634 /* OrderParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B787ED2CC2314200B71634 /* OrderParams.swift */; };
+		75B788072CC2314200B71634 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B787F72CC2314200B71634 /* Logger.swift */; };
+		75B788082CC2314200B71634 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B787F52CC2314200B71634 /* Constants.swift */; };
+		75B788092CC2314200B71634 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B787FB2CC2314200B71634 /* WebViewController.swift */; };
+		75B7880A2CC2314200B71634 /* PaymentObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B787EF2CC2314200B71634 /* PaymentObject.swift */; };
+		75B7880B2CC2314200B71634 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B787F82CC2314200B71634 /* NetworkManager.swift */; };
+		75B7880C2CC2314200B71634 /* Culture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B787E92CC2314200B71634 /* Culture.swift */; };
+		75B7880D2CC2314200B71634 /* ViewParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B787F32CC2314200B71634 /* ViewParams.swift */; };
+		75B7880E2CC2314200B71634 /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B787F62CC2314200B71634 /* Endpoint.swift */; };
+		75B7880F2CC2314200B71634 /* Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B787EA2CC2314200B71634 /* Currency.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		75B3A6302CA52B29007C9098 /* Robokassa.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Robokassa.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		75B3A6332CA52B29007C9098 /* Robokassa.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Robokassa.h; sourceTree = "<group>"; };
-		75B3A63A2CA52B46007C9098 /* Starter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Starter.swift; sourceTree = "<group>"; };
+		75B787E52CC2314200B71634 /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
+		75B787E62CC2314200B71634 /* UIApplication+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+Extensions.swift"; sourceTree = "<group>"; };
+		75B787E82CC2314200B71634 /* BaseParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseParams.swift; sourceTree = "<group>"; };
+		75B787E92CC2314200B71634 /* Culture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Culture.swift; sourceTree = "<group>"; };
+		75B787EA2CC2314200B71634 /* Currency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Currency.swift; sourceTree = "<group>"; };
+		75B787EB2CC2314200B71634 /* CustomerParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerParams.swift; sourceTree = "<group>"; };
+		75B787EC2CC2314200B71634 /* Invoice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Invoice.swift; sourceTree = "<group>"; };
+		75B787ED2CC2314200B71634 /* OrderParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderParams.swift; sourceTree = "<group>"; };
+		75B787EE2CC2314200B71634 /* PaymentMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentMethod.swift; sourceTree = "<group>"; };
+		75B787EF2CC2314200B71634 /* PaymentObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentObject.swift; sourceTree = "<group>"; };
+		75B787F02CC2314200B71634 /* PaymentParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentParams.swift; sourceTree = "<group>"; };
+		75B787F12CC2314200B71634 /* PaymentResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentResult.swift; sourceTree = "<group>"; };
+		75B787F22CC2314200B71634 /* Receipt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Receipt.swift; sourceTree = "<group>"; };
+		75B787F32CC2314200B71634 /* ViewParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewParams.swift; sourceTree = "<group>"; };
+		75B787F52CC2314200B71634 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		75B787F62CC2314200B71634 /* Endpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
+		75B787F72CC2314200B71634 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		75B787F82CC2314200B71634 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		75B787FA2CC2314200B71634 /* Robokassa.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Robokassa.swift; sourceTree = "<group>"; };
+		75B787FB2CC2314200B71634 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,9 +86,52 @@
 			isa = PBXGroup;
 			children = (
 				75B3A6332CA52B29007C9098 /* Robokassa.h */,
-				75B3A63A2CA52B46007C9098 /* Starter.swift */,
+				75B787FA2CC2314200B71634 /* Robokassa.swift */,
+				75B787FB2CC2314200B71634 /* WebViewController.swift */,
+				75B787E72CC2314200B71634 /* Extensions */,
+				75B787F42CC2314200B71634 /* Models */,
+				75B787F92CC2314200B71634 /* Network */,
 			);
 			path = Robokassa;
+			sourceTree = "<group>";
+		};
+		75B787E72CC2314200B71634 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				75B787E52CC2314200B71634 /* Date+Extension.swift */,
+				75B787E62CC2314200B71634 /* UIApplication+Extensions.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		75B787F42CC2314200B71634 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				75B787E82CC2314200B71634 /* BaseParams.swift */,
+				75B787E92CC2314200B71634 /* Culture.swift */,
+				75B787EA2CC2314200B71634 /* Currency.swift */,
+				75B787EB2CC2314200B71634 /* CustomerParams.swift */,
+				75B787EC2CC2314200B71634 /* Invoice.swift */,
+				75B787ED2CC2314200B71634 /* OrderParams.swift */,
+				75B787EE2CC2314200B71634 /* PaymentMethod.swift */,
+				75B787EF2CC2314200B71634 /* PaymentObject.swift */,
+				75B787F02CC2314200B71634 /* PaymentParams.swift */,
+				75B787F12CC2314200B71634 /* PaymentResult.swift */,
+				75B787F22CC2314200B71634 /* Receipt.swift */,
+				75B787F32CC2314200B71634 /* ViewParams.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		75B787F92CC2314200B71634 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				75B787F52CC2314200B71634 /* Constants.swift */,
+				75B787F62CC2314200B71634 /* Endpoint.swift */,
+				75B787F72CC2314200B71634 /* Logger.swift */,
+				75B787F82CC2314200B71634 /* NetworkManager.swift */,
+			);
+			path = Network;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -92,7 +173,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastUpgradeCheck = 1540;
+				LastUpgradeCheck = 1600;
 				TargetAttributes = {
 					75B3A62F2CA52B29007C9098 = {
 						CreatedOnToolsVersion = 15.4;
@@ -133,7 +214,26 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				75B3A63B2CA52B46007C9098 /* Starter.swift in Sources */,
+				75B787FC2CC2314200B71634 /* BaseParams.swift in Sources */,
+				75B787FD2CC2314200B71634 /* PaymentMethod.swift in Sources */,
+				75B787FE2CC2314200B71634 /* Invoice.swift in Sources */,
+				75B787FF2CC2314200B71634 /* Receipt.swift in Sources */,
+				75B788002CC2314200B71634 /* Robokassa.swift in Sources */,
+				75B788012CC2314200B71634 /* CustomerParams.swift in Sources */,
+				75B788022CC2314200B71634 /* PaymentParams.swift in Sources */,
+				75B788032CC2314200B71634 /* UIApplication+Extensions.swift in Sources */,
+				75B788042CC2314200B71634 /* Date+Extension.swift in Sources */,
+				75B788052CC2314200B71634 /* PaymentResult.swift in Sources */,
+				75B788062CC2314200B71634 /* OrderParams.swift in Sources */,
+				75B788072CC2314200B71634 /* Logger.swift in Sources */,
+				75B788082CC2314200B71634 /* Constants.swift in Sources */,
+				75B788092CC2314200B71634 /* WebViewController.swift in Sources */,
+				75B7880A2CC2314200B71634 /* PaymentObject.swift in Sources */,
+				75B7880B2CC2314200B71634 /* NetworkManager.swift in Sources */,
+				75B7880C2CC2314200B71634 /* Culture.swift in Sources */,
+				75B7880D2CC2314200B71634 /* ViewParams.swift in Sources */,
+				75B7880E2CC2314200B71634 /* Endpoint.swift in Sources */,
+				75B7880F2CC2314200B71634 /* Currency.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -268,18 +368,20 @@
 		75B3A6382CA52B29007C9098 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
-				CLANG_ENABLE_MODULES = YES;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
+				CLANG_ENABLE_MODULES = NO;
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_MODULE_VERIFIER = YES;
+				ENABLE_MODULE_VERIFIER = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -306,18 +408,20 @@
 		75B3A6392CA52B29007C9098 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
-				CLANG_ENABLE_MODULES = YES;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
+				CLANG_ENABLE_MODULES = NO;
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_MODULE_VERIFIER = YES;
+				ENABLE_MODULE_VERIFIER = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
