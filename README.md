@@ -1,12 +1,15 @@
 # Robokassa SDK iOS
 
-## Способы установки
+## Способы установки:
 
 **Pod**:
+
 pod 'RobokassaSDK', :git => 'https://github.com/madjios/RobokassaSDK.git', :tag => '1.0.0'
 
 **SPM**:
+
 https://github.com/madjios/RobokassaSDK.git
+
 
 ### SDK позволяет интегрировать прием платежей через сервис Robokassa в мобильное приложение iOS. Библиотека написана на языке Swift.
 
@@ -32,11 +35,11 @@ https://github.com/madjios/RobokassaSDK.git
 
 Для подключения библиотеки в ваш проект, вы можете:
 
-- Установить СДК с помощью Cocoapods. Для этого создайте 'podfile', если нет. Если же есть, то впишите туда:
+- Установить СДК с помощью Cocoapods. Для этого создайте 'podfile' (для этого введите в терминале команду: pod init), если нет. Если же есть, то впишите туда:
 
-**pod 'RobokassaSDK', :git => 'https://github.com/madjios/RobokassaSDK.git', :tag => '1.0.0'**
+pod 'RobokassaSDK', :git => 'https://github.com/madjios/RobokassaSDK.git', :tag => '1.0.0'
 
-- Установить СДК с помощью SPM (Swift Package Manager). Для этого подключите в самом проекте следующим URL:
+- Установить СДК с помощью SPM (Swift Package Manager). Для этого подключите в самом проекте следующим URL (Project -> Package dependencies):
 
 https://github.com/madjios/RobokassaSDK.git
 
@@ -93,7 +96,6 @@ let paymentParams = RobokassaSDK.PaymentParams(
 
 Чтобы инициализировать Robokassa SDK, нужно выполнить следующее:
 
-- Передать инвойс айди
 - Логин: идентификатор магазина
 - Пароль №1
 - Пароль №2
@@ -106,12 +108,12 @@ let paymentParams = RobokassaSDK.PaymentParams(
 
 ```swift
 let robokassa = Robokassa(
-    invoiceId: 12345,           // номер заказа в системе продавца
     login: MERCHANT_LOGIN,      // логин
     password: PASSWORD_1,       // пароль№1, если isTesting: true, то необходимо передать тестовый_пароль№1
     password2: PASSWORD_2,      // пароль№2, если isTesting: true, то необходимо передать тестовый_пароль№2
     isTesting: false            // определяет тестовый ли будет платеж
 )
+
 robokassa.onDimissHandler = {
     print("Robokassa SDK finished its job")
 }
