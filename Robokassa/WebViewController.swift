@@ -42,10 +42,7 @@ final class WebViewController: UIViewController {
         view.backgroundColor = .white
         
         let preferences = WKWebpagePreferences()
-        
-        if #available(iOS 14.0, *) {
-            preferences.allowsContentJavaScript = true
-        }
+        preferences.allowsContentJavaScript = true
         
         let config = WKWebViewConfiguration()
         config.defaultWebpagePreferences = preferences
