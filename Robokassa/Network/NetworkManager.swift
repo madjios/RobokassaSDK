@@ -64,6 +64,15 @@ final class RequestManager {
         }
     }
     
+    func requestToGetString(to endpoint: Endpoint) async throws -> String {
+        do {
+            let data = try await requestTo(endpoint: endpoint)
+            return String(data: data, encoding: .utf8) ?? ""
+        } catch {
+            throw error
+        }
+    }
+    
     func request(to endpoint: Endpoint) async throws -> [String: Any] {
         do {
             let data = try await requestTo(endpoint: endpoint)

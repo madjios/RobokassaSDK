@@ -29,6 +29,7 @@ final class ViewController: UIViewController {
         textField.backgroundColor = .clear
         textField.borderStyle = .roundedRect
         textField.placeholder = "Введите..."
+        textField.keyboardType = .numberPad
         
         return textField
     }()
@@ -73,9 +74,18 @@ final class ViewController: UIViewController {
         return button
     }()
     
+    private let robokassa = Robokassa(
+        login: "",          // идентификатор (логин) магазина
+        password: "",       // пароль для подписи запросов к сервису
+        password2: "",      // пароль для подписи запросов к сервису
+        isTesting: false    // true для указание тестовых запросов. Также если true, то и пароли должны быть тестовыми.
+    )
+    
     private let storage = Storage()
     
     private let buttonHeight: CGFloat = 48.0
+    
+    private var selectedPaymentType: RobokassaSDK.PaymentType?
     
     // MARK: - Lifecycle -
 
@@ -110,37 +120,60 @@ fileprivate extension ViewController {
         
         simplePaymentButton.addAction(.init(handler: { [weak self] _ in
             self?.simplePaymentButton.isLoading = true
+            self?.selectedPaymentType = .simplePayment
             self?.routeToWebView(with: .simplePayment)
         }), for: .touchUpInside)
         
         holdingButton.addAction(.init(handler: { [weak self] _ in
             self?.holdingButton.isLoading = true
+            self?.selectedPaymentType = .holding
             self?.routeToWebView(with: .holding)
         }), for: .touchUpInside)
         
         confirmHoldingButton.addAction(.init(handler: { [weak self] _ in
             self?.confirmHoldingButton.isLoading = true
+            self?.selectedPaymentType = .confirmHolding
             self?.didTapConfirmHolding()
         }), for: .touchUpInside)
         
         cancelHoldingButton.addAction(.init(handler: { [weak self] _ in
             self?.cancelHoldingButton.isLoading = true
+            self?.selectedPaymentType = .cancelHolding
             self?.didTapCancelHolding()
         }), for: .touchUpInside)
         
         reccurentPaymentButton.addAction(.init(handler: { [weak self] _ in
+            self?.selectedPaymentType = .reccurentPayment
             self?.didTapRecurrent()
         }), for: .touchUpInside)
+        
+        robokassa.onDimissHandler = {
+            print("ROBOKASSA SDK DISMISSED")
+        }
+        robokassa.onSuccessHandler = { [weak self] in
+            if let type = self?.selectedPaymentType {
+                if type == .reccurentPayment {
+                    if let id = Int(self?.textField.text ?? ""), self?.storage.previoudOrderId == nil {
+                        self?.storage.previoudOrderId = id
+                    }
+                }
+            }
+            
+            self?.presentResult(title: "Success", message: "Successfully finished payment")
+        }
+        robokassa.onFailureHandler = { [weak self] reason in
+            self?.presentResult(title: "Failure", message: reason)
+        }
     }
     
     func routeToWebView(with type: RobokassaSDK.PaymentType) {
         switch type {
         case .simplePayment:
-            createRobokassa().startSimplePayment(with: createParams())
+            robokassa.startSimplePayment(with: createParams())
         case .holding:
-            createRobokassa().startHoldingPayment(with: createParams())
+            robokassa.startHoldingPayment(with: createParams())
         case .reccurentPayment:
-            createRobokassa().startDefaultReccurentPayment(with: createParams())
+            robokassa.startDefaultReccurentPayment(with: createParams())
         default:
             break
         }
@@ -151,38 +184,36 @@ fileprivate extension ViewController {
 
 fileprivate extension ViewController {
     func didTapConfirmHolding() {
-        createRobokassa()
-            .confirmHoldingPayment(with: createParams()) { [weak self] result in
-                self?.confirmHoldingButton.isLoading = false
-                
-                switch result {
-                case let .success(response):
-                    print("SUCCESSFULLY CONFIRMED HOLDING PAYMENT. Response: \(response)")
-                case let .failure(error):
-                    print(error.localizedDescription)
-                }
+        robokassa.confirmHoldingPayment(with: createParams()) { [weak self] result in
+            self?.confirmHoldingButton.isLoading = false
+            
+            switch result {
+            case let .success(response):
+                print("SUCCESSFULLY CONFIRMED HOLDING PAYMENT. Response: \(response)")
+            case let .failure(error):
+                print(error.localizedDescription)
             }
+        }
     }
     
     func didTapCancelHolding() {
-        createRobokassa()
-            .cancelHoldingPayment(with: createParams()) { [weak self] result in
-                self?.cancelHoldingButton.isLoading = false
-                
-                switch result {
-                case let .success(response):
-                    print("SUCCESSFULLY CANCELLED HOLDING PAYMENT. Response: \(response)")
-                case let .failure(error):
-                    print(error.localizedDescription)
-                }
+        robokassa.cancelHoldingPayment(with: createParams()) { [weak self] result in
+            self?.cancelHoldingButton.isLoading = false
+            
+            switch result {
+            case let .success(response):
+                print("SUCCESSFULLY CANCELLED HOLDING PAYMENT. Response: \(response)")
+            case let .failure(error):
+                print(error.localizedDescription)
             }
+        }
     }
     
     func didTapRecurrent() {
         if let previousOrderId = storage.previoudOrderId {
             var params = createParams()
             params.order.previousInvoiceId = previousOrderId
-            createRobokassa().startReccurentPayment(with: params) { result in
+            robokassa.startReccurentPayment(with: params) { result in
                 switch result {
                 case let .success(response):
                     print("SUCCESSFULLY FINISHED RECURRENT PAYMENT. Response: \(response)")
@@ -195,47 +226,27 @@ fileprivate extension ViewController {
         }
     }
     
-    func createRobokassa() -> RobokassaSDK.Robokassa {
-        let robokassa = Robokassa(
-            invoiceId: textField.text ?? "",
-            login: "",          // идентификатор (логин) магазина
-            password: "",       // пароль для подписи запросов к сервису
-            password2: "",      // пароль для подписи запросов к сервису
-            isTesting: false    // true для указание тестовых запросов. Также если true, то и пароли должны быть тестовыми.
-        )
-        robokassa.onDimissHandler = {
-            print("ROBOKASSA SDK DISMISSED")
-        }
-        robokassa.onSuccessHandler = { [weak self] in
-            self?.presentResult(title: "Success", message: "Successfully finished payment")
-        }
-        robokassa.onFailureHandler = { [weak self] reason in
-            self?.presentResult(title: "Failure", message: reason)
-        }
-        
-        return robokassa
-    }
-    
     func createParams() -> RobokassaSDK.PaymentParams {
         RobokassaSDK.PaymentParams(
             order: RobokassaSDK.OrderParams(
-                invoiceId: Int(textField.text ?? "") ?? 0,
-                orderSum: 1.0,
-                description: "Test simple pay",
+                invoiceId: Int(textField.text ?? "") ?? 0,              // Номер инвойса
+                orderSum: 1.0,                                          // Сумма платежа
+                description: "Тестовый  платеж",                        // Описание платежа
                 expirationDate: Date().dateByAdding(.day, value: 1),
                 receipt: .init(
                     items: [
                         .init(
-                            name: "Ботинки детские",
-                            sum: 1.0,
-                            quantity: 1,
+                            name: "",       // Наименование товара
+                            sum: 1.0,       // Сумма товара
+                            quantity: 1,    // Кол-во
                             paymentMethod: .fullPayment,
                             tax: .NONE
                         )
                     ]
                 )
             ),
-            customer: .init(culture: .ru, email: "iammadj.u@gmail.com"),
+            customer: .init(
+                culture: .ru, email: "john@doe.com"), // Введите свой e-mail
             view: .init(toolbarText: "Простая оплата", hasToolbar: true)
         )
     }
@@ -243,12 +254,13 @@ fileprivate extension ViewController {
     func presentResult(title: String?, message: String?) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let cancel = UIAlertAction(title: "Закрыть", style: .cancel)
+        alert.addAction(cancel)
         
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(5)) {
             alert.dismiss(animated: true)
         }
         
-        present(alert, animated: true)
+        navigationController?.present(alert, animated: true)
     }
 }
 

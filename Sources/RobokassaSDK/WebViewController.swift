@@ -15,7 +15,6 @@ final class WebViewController: UIViewController {
     
     private(set) var invoiceId: String
     private(set) var params: PaymentParams
-    private(set) var paymentType: PaymentType
     private(set) var isTesting: Bool
     
     var onSucccessHandler: (() -> Void)?
@@ -24,10 +23,9 @@ final class WebViewController: UIViewController {
     
     // MARK: - Init -
     
-    init(invoiceId: String, params: PaymentParams, paymentType: PaymentType, isTesting: Bool = false) {
+    init(invoiceId: String, params: PaymentParams, isTesting: Bool = false) {
         self.invoiceId = invoiceId
         self.params = params
-        self.paymentType = paymentType
         self.isTesting = isTesting
         
         super.init(nibName: nil, bundle: nil)
@@ -129,53 +127,28 @@ fileprivate extension WebViewController {
             do {
                 let result = try await RequestManager.shared.request(to: .checkPaymentStatus(params))
                 
-                if paymentType == .simplePayment {
-                    if let value = result["Code"] as? String {
-                        let codeType = PaymentResult(rawValue: value) ?? .notFound
-                        
-                        if codeType == .success {
-                            invalidateTimer()
-                            onSucccessHandler?()
-                        } else {
-                            onFailureHandler?(codeType.title)
-                        }
-                        
+                if let value = result["Result"] as? String {
+                    let codeType = PaymentResult(rawValue: value) ?? .notFound
+                    
+                    if codeType == .success {
+                        invalidateTimer()
+                        onSucccessHandler?()
+                    } else {
+                        onFailureHandler?(codeType.title)
+                    }
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
+                        self.didTapBack()
+                    }
+                } else {
+                    handleFailureState(result)
+                    
+                    if seconds < 1 {
                         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
                             self.didTapBack()
                         }
-                    } else {
-                        handleFailureState(result)
-                        
-                        if seconds < 1 {
-                            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
-                                self.didTapBack()
-                            }
-                        }
                     }
-                } else if paymentType == .holding || paymentType == .reccurentPayment {
-                    if let value = result["Result"] as? String {
-                        let codeType = PaymentResult(rawValue: value) ?? .notFound
-                        
-                        if codeType == .success {
-                            invalidateTimer()
-                            onSucccessHandler?()
-                        } else {
-                            onFailureHandler?(codeType.title)
-                        }
-                        
-                        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
-                            self.didTapBack()
-                        }
-                    } else {
-                        handleFailureState(result)
-                        
-                        if seconds < 1 {
-                            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
-                                self.didTapBack()
-                            }
-                        }
-                    }
-                } 
+                }
             } catch {
                 invalidateTimer()
                 onFailureHandler?(error.localizedDescription)

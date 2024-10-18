@@ -16,24 +16,22 @@ public enum PaymentType {
         case .holding: "Холдирование"
         case .confirmHolding: "Подтвердить холдирование"
         case .cancelHolding: "Отменить холдирование"
-        case .reccurentPayment: "Реккурентная оплата"
+        case .reccurentPayment: "Рекуррентная оплата"
         }
     }
 }
 
 public final class Robokassa {
-    private(set) var invoiceId: String
     private(set) var login: String
     private(set) var password: String
     private(set) var password2: String
     private(set) var isTesting: Bool
-    
+        
     public var onDimissHandler: (() -> Void)?
     public var onSuccessHandler: (() -> Void)?
     public var onFailureHandler: ((String) -> Void)?
     
-    public init(invoiceId: String, login: String, password: String, password2: String, isTesting: Bool = false) {
-        self.invoiceId = invoiceId
+    public init(login: String, password: String, password2: String, isTesting: Bool = false) {
         self.login = login
         self.password = password
         self.password2 = password2
@@ -45,7 +43,7 @@ public final class Robokassa {
         params.merchantLogin = login
         params.password1 = password
         params.password2 = password2
-        fetchInvoice(with: params, paymentType: .simplePayment)
+        fetchInvoice(with: params)
     }
     
     public func startHoldingPayment(with params: PaymentParams) {
@@ -54,7 +52,7 @@ public final class Robokassa {
         params.password1 = password
         params.password2 = password2
         params.order.isHold = true
-        fetchInvoice(with: params, paymentType: .holding)
+        fetchInvoice(with: params)
     }
     
     public func confirmHoldingPayment(with params: PaymentParams, completion: @escaping (Result<Bool, Error>) -> Void) {
@@ -101,7 +99,7 @@ public final class Robokassa {
         params.password1 = password
         params.password2 = password2
         params.order.isRecurrent = true
-        fetchInvoice(with: params, paymentType: .reccurentPayment)
+        fetchInvoice(with: params)
     }
     
     public func startReccurentPayment(with params: PaymentParams, completion: @escaping (Result<Bool, Error>) -> Void) {
@@ -127,11 +125,11 @@ public final class Robokassa {
 // MARK: - Privates -
 
 fileprivate extension Robokassa {
-    func fetchInvoice(with params: PaymentParams, paymentType: PaymentType) {
+    func fetchInvoice(with params: PaymentParams) {
         Task { @MainActor in
             do {
                 let result = try await RequestManager.shared.request(to: .getInvoice(params, isTesting), type: Invoice.self)
-                pushWebView(with: result.invoiceID, params: params, paymentType: paymentType)
+                pushWebView(with: result.invoiceID, params: params)
             } catch {
                 print(error.localizedDescription)
             }
@@ -160,8 +158,13 @@ fileprivate extension Robokassa {
         Task { @MainActor in
             do {
                 let response = try await RequestManager.shared.request(to: .cancelHoldPayment(params), type: String.self)
-                let result = response.lowercased().contains("true")
-                completion(.success(result))
+                let isSuccess = response.lowercased().contains("true")
+                
+                if isSuccess {
+                    completion(.success(isSuccess))
+                } else {
+                    completion(.failure(MessagedError(message: response)))
+                }
             } catch {
                 print(error.localizedDescription)
                 completion(.failure(error))
@@ -171,15 +174,26 @@ fileprivate extension Robokassa {
     
     func requestHoldingPaymentCancellation(with params: PaymentParams) async throws -> Bool {
         let response = try await RequestManager.shared.request(to: .cancelHoldPayment(params), type: String.self)
-        return response.lowercased().contains("true")
+        let isSuccess = response.lowercased().contains("true")
+        
+        if isSuccess {
+            return isSuccess
+        } else {
+            throw MessagedError(message: response)
+        }
     }
     
     func requestRecurrentPayment(with params: PaymentParams, completion: @escaping (Result<Bool, Error>) -> Void) {
         Task { @MainActor in
             do {
-                let response = try await RequestManager.shared.request(to: .reccurentPayment(params), type: String.self)
-                let result = response.lowercased().contains("ok")
-                completion(.success(result))
+                let response = try await RequestManager.shared.requestToGetString(to: .reccurentPayment(params))
+                let isSuccess = response.lowercased().contains("ok")
+                
+                if isSuccess {
+                    completion(.success(isSuccess))
+                } else {
+                    completion(.failure(MessagedError(message: response)))
+                }
             } catch {
                 print(error.localizedDescription)
                 completion(.failure(error))
@@ -188,17 +202,18 @@ fileprivate extension Robokassa {
     }
     
     func requestRecurrentPayment(with params: PaymentParams) async throws -> Bool {
-        let response = try await RequestManager.shared.request(to: .reccurentPayment(params), type: String.self)
-        return response.lowercased().contains("ok")
+        let response = try await RequestManager.shared.requestToGetString(to: .reccurentPayment(params))
+        let isSuccess = response.lowercased().contains("ok")
+        
+        if isSuccess {
+            return isSuccess
+        } else {
+            throw MessagedError(message: response)
+        }
     }
     
-    func pushWebView(with invoiceId: String, params: PaymentParams, paymentType: PaymentType) {
-        let webView = WebViewController(
-            invoiceId: invoiceId,
-            params: params,
-            paymentType: paymentType,
-            isTesting: isTesting
-        )
+    func pushWebView(with invoiceId: String, params: PaymentParams) {
+        let webView = WebViewController(invoiceId: invoiceId, params: params, isTesting: isTesting)
         webView.onDismissHandler = { [weak self] in
             self?.onDimissHandler?()
         }

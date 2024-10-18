@@ -11,7 +11,7 @@ final class Storage {
         }
     }
     
-    func removeCache() {
+    func cleanCache() {
         Keys.allCases.forEach {
             userDefaults.removeObject(forKey: $0.key)
         }
