@@ -198,10 +198,10 @@ fileprivate extension ViewController {
     func createRobokassa() -> RobokassaSDK.Robokassa {
         let robokassa = Robokassa(
             invoiceId: textField.text ?? "",
-            login: RobokassaSDK.Constants.MERCHANT,
-            password: RobokassaSDK.Constants.PWD_1,
-            password2: RobokassaSDK.Constants.PWD_2,
-            isTesting: false
+            login: "",          // идентификатор (логин) магазина
+            password: "",       // пароль для подписи запросов к сервису
+            password2: "",      // пароль для подписи запросов к сервису
+            isTesting: false    // true для указание тестовых запросов. Также если true, то и пароли должны быть тестовыми.
         )
         robokassa.onDimissHandler = {
             print("ROBOKASSA SDK DISMISSED")

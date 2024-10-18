@@ -93,7 +93,7 @@ extension WebViewController: WKNavigationDelegate {
 
 fileprivate extension WebViewController {
     func loadWebView() {
-        if let url = URL(string: Constants.URLs.simplePayment + invoiceId) {
+        if let url = URL(string: Constants.simplePayment + invoiceId) {
             var request = URLRequest(url: url)
             request.httpMethod = HTTPMethod.post.rawValue
             request.setValue(Constants.FORM_URL_ENCODED, forHTTPHeaderField: "Content-Type")

@@ -9,11 +9,11 @@ enum Endpoint {
     
     var url: String {
         return switch self {
-        case .getInvoice: Constants.URLs.main
-        case .confirmHoldPayment: Constants.URLs.holdingConfirm
-        case .cancelHoldPayment: Constants.URLs.holdingCancel
-        case .reccurentPayment: Constants.URLs.recurringPayment
-        case .checkPaymentStatus: Constants.URLs.checkPayment
+        case .getInvoice: Constants.main
+        case .confirmHoldPayment: Constants.holdingConfirm
+        case .cancelHoldPayment: Constants.holdingCancel
+        case .reccurentPayment: Constants.recurringPayment
+        case .checkPaymentStatus: Constants.checkPayment
         }
     }
     
