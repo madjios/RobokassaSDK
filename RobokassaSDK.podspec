@@ -10,10 +10,10 @@ Pod::Spec.new do |spec|
   spec.name           = 'RobokassaSDK'
   spec.version        = '1.0.0'
   spec.summary        = 'Robokassa iOS SDK'
-  spec.description    = 'This is the Robokassa iOS SDK'
-  spec.homepage       = 'https://github.com/madjios/RobokassaSDK'
+  spec.description    = 'Robokassa SDK позволяет интегрировать прием платежей через сервис Robokassa в мобильное приложение iOS'
+  spec.homepage       = 'https://robokassa.com'
   spec.license        = 'MIT'
-  spec.author         = { 'Majit U.' => 'majit.ios.dev@icloud.com' }
+  spec.author         = { 'Robokassa' => ' support@robokassa.ru' }
   spec.platform       = :ios, '14.0'
   spec.source         = { :git => 'https://github.com/madjios/RobokassaSDK.git', :tag => spec.version }
   spec.ios.deployment_target = '14.0'
