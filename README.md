@@ -26,8 +26,7 @@ https://github.com/madjios/RobokassaSDK.git
 Данные можно найти в личном кабинете (ЛК) Robokassa.
 В корне репозитория собран проект состоящий из библиотеки (Robokassa.xcodeproj - для работы с Cocoapods) и демо приложение (Example), которое показывает пример интеграции SDK:
 
-![Home page of example project](https://github.com/madjios/RobokassaSDK/blob/main/Example/Example/Assets.xcassets/home.imageset/home.png)
-![WebView's payment page of example project](https://github.com/madjios/RobokassaSDK/blob/main/Example/Example/Assets.xcassets/credentials.imageset/credentials.png)
+![screens of example project](https://github.com/madjios/RobokassaSDK/blob/main/screens.png)
 
 **Подключение зависимостей**
 
