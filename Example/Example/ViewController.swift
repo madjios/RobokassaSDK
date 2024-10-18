@@ -195,18 +195,18 @@ fileprivate extension ViewController {
 //        }
     }
     
-//    func createRobokassa() -> RobokassaSDK.Robokassa {
-//        Robokassa(
-//            invoiceId: textField.text ?? "",
-//            login: "ipolh.com",
-//            password: "X7SlyJ9I4z50JpaiKCjj",
-//            password2: Constants.PWD_2,
-//            isTesting: false
-//        )
-//    }
+    func createRobokassa() -> RobokassaSDK.Robokassa {
+        Robokassa(
+            invoiceId: textField.text ?? "",
+            login: RobokassaSDK.Constants.MERCHANT,
+            password: RobokassaSDK.Constants.PWD_2,
+            password2: RobokassaSDK.Constants.PWD_2,
+            isTesting: false
+        )
+    }
     
-//    func createParams() -> PaymentParams {
-//        PaymentParams(
+//    func createParams() -> RobokassaSDK.PaymentParams {
+//        .init(
 //            order: .init(
 //                invoiceId: Int(textField.text ?? "") ?? 0,
 //                orderSum: 1.0,

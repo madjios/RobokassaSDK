@@ -4,7 +4,6 @@ import UIKit
 
 
 public struct ViewParams: Codable {
-    
     /// Цвет фона тулбара на странице оплаты.
     /// Указывается в формате Color Hex, например, #000000 для черного цвета.
     public var toolbarBgColor: String?
@@ -24,18 +23,5 @@ public struct ViewParams: Codable {
         self.toolbarTextColor = toolbarTextColor
         self.toolbarText = toolbarText
         self.hasToolbar = hasToolbar
-    }
-    
-    private func isValidColorHex(_ hex: String?) -> Bool {
-        guard let hex = hex else { return false }
-        
-        var rgb: UInt64 = 0
-        let scanner = Scanner(string: hex)
-        
-        if hex.hasPrefix("#") {
-            scanner.currentIndex = hex.index(after: hex.startIndex)
-        }
-        
-        return scanner.scanHexInt64(&rgb)
     }
 }

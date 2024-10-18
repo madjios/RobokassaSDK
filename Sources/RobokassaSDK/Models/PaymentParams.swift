@@ -2,18 +2,27 @@ import Foundation
 import CryptoKit
 
 public struct PaymentParams: BaseParams, Codable {
-    var merchantLogin: String = ""
-    var password1: String = ""
-    var password2: String = ""
+    public var merchantLogin: String = ""
+    public var password1: String = ""
+    public var password2: String = ""
     
     // Order information
-    var order: OrderParams
+    public var order: OrderParams
 
     // Customer information
-    var customer: CustomerParams
+    public var customer: CustomerParams
 
     // View parameters for payment page appearance
-    var view: ViewParams
+    public var view: ViewParams
+    
+    public init(merchantLogin: String, password1: String, password2: String, order: OrderParams, customer: CustomerParams, view: ViewParams) {
+        self.merchantLogin = merchantLogin
+        self.password1 = password1
+        self.password2 = password2
+        self.order = order
+        self.customer = customer
+        self.view = view
+    }
 }
 
 public extension PaymentParams {
