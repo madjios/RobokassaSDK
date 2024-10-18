@@ -15,25 +15,19 @@ public struct OrderParams: Codable {
     
     public init(
         invoiceId: Int,
-        previousInvoiceId: Int,
         orderSum: Double,
         description: String? = nil,
         incCurrLabel: String? = nil,
         token: String? = nil,
-        isRecurrent: Bool,
-        isHold: Bool,
         outSumCurrency: Currency? = nil,
         expirationDate: Date? = nil,
         receipt: Receipt? = nil
     ) {
         self.invoiceId = invoiceId
-        self.previousInvoiceId = previousInvoiceId
         self.orderSum = orderSum
         self.description = description
         self.incCurrLabel = incCurrLabel
         self.token = token
-        self.isRecurrent = isRecurrent
-        self.isHold = isHold
         self.outSumCurrency = outSumCurrency
         self.expirationDate = expirationDate
         self.receipt = receipt

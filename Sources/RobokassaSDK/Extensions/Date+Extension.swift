@@ -1,6 +1,6 @@
 import Foundation
 
-extension Date {
+public extension Date {
     var isoString: String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ"

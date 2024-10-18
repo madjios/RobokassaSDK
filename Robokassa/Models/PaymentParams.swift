@@ -15,10 +15,7 @@ public struct PaymentParams: BaseParams, Codable {
     // View parameters for payment page appearance
     public var view: ViewParams
     
-    public init(merchantLogin: String, password1: String, password2: String, order: OrderParams, customer: CustomerParams, view: ViewParams) {
-        self.merchantLogin = merchantLogin
-        self.password1 = password1
-        self.password2 = password2
+    public init(order: OrderParams, customer: CustomerParams, view: ViewParams) {
         self.order = order
         self.customer = customer
         self.view = view

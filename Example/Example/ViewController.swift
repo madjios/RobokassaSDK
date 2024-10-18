@@ -206,8 +206,8 @@ fileprivate extension ViewController {
     }
     
 //    func createParams() -> RobokassaSDK.PaymentParams {
-//        .init(
-//            order: .init(
+//        RobokassaSDK.PaymentParams(
+//            order: RobokassaSDK.OrderParams(
 //                invoiceId: Int(textField.text ?? "") ?? 0,
 //                orderSum: 1.0,
 //                description: "Test simple pay",
