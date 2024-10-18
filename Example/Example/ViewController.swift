@@ -44,7 +44,7 @@ final class ViewController: UIViewController {
     private let holdingButton: Button = {
         let button = Button()
         button.translatesAutoresizingMaskIntoConstraints = false
-//        button.setTitle(PaymentType.holding.title, for: .normal)
+        button.setTitle(RobokassaSDK.PaymentType.holding.title, for: .normal)
         
         return button
     }()
@@ -110,12 +110,12 @@ fileprivate extension ViewController {
         
         simplePaymentButton.addAction(.init(handler: { [weak self] _ in
             self?.simplePaymentButton.isLoading = true
-//            self?.routeToWebView(with: .simplePayment)
+            self?.routeToWebView(with: .simplePayment)
         }), for: .touchUpInside)
         
         holdingButton.addAction(.init(handler: { [weak self] _ in
             self?.holdingButton.isLoading = true
-//            self?.routeToWebView(with: .holding)
+            self?.routeToWebView(with: .holding)
         }), for: .touchUpInside)
         
         confirmHoldingButton.addAction(.init(handler: { [weak self] _ in
@@ -134,16 +134,16 @@ fileprivate extension ViewController {
     }
     
     func routeToWebView(with type: RobokassaSDK.PaymentType) {
-//        switch type {
-//        case .simplePayment:
-//            createRobokassa().startSimplePayment(with: createParams())
-//        case .holding:
-//            createRobokassa().startHoldingPayment(with: createParams())
-//        case .reccurentPayment:
-//            createRobokassa().startDefaultReccurentPayment(with: createParams())
-//        default:
-//            break
-//        }
+        switch type {
+        case .simplePayment:
+            createRobokassa().startSimplePayment(with: createParams())
+        case .holding:
+            createRobokassa().startHoldingPayment(with: createParams())
+        case .reccurentPayment:
+            createRobokassa().startDefaultReccurentPayment(with: createParams())
+        default:
+            break
+        }
     }
 }
 
@@ -151,83 +151,105 @@ fileprivate extension ViewController {
 
 fileprivate extension ViewController {
     func didTapConfirmHolding() {
-//        createRobokassa()
-//            .confirmHoldingPayment(with: createParams()) { [weak self] result in
-//                self?.confirmHoldingButton.isLoading = false
-//                
-//                switch result {
-//                case let .success(response):
-//                    print("SUCCESSFULLY CONFIRMED HOLDING PAYMENT. Response: \(response)")
-//                case let .failure(error):
-//                    print(error.localizedDescription)
-//                }
-//            }
+        createRobokassa()
+            .confirmHoldingPayment(with: createParams()) { [weak self] result in
+                self?.confirmHoldingButton.isLoading = false
+                
+                switch result {
+                case let .success(response):
+                    print("SUCCESSFULLY CONFIRMED HOLDING PAYMENT. Response: \(response)")
+                case let .failure(error):
+                    print(error.localizedDescription)
+                }
+            }
     }
     
     func didTapCancelHolding() {
-//        createRobokassa()
-//            .cancelHoldingPayment(with: createParams()) { [weak self] result in
-//                self?.cancelHoldingButton.isLoading = false
-//                
-//                switch result {
-//                case let .success(response):
-//                    print("SUCCESSFULLY CANCELLED HOLDING PAYMENT. Response: \(response)")
-//                case let .failure(error):
-//                    print(error.localizedDescription)
-//                }
-//            }
+        createRobokassa()
+            .cancelHoldingPayment(with: createParams()) { [weak self] result in
+                self?.cancelHoldingButton.isLoading = false
+                
+                switch result {
+                case let .success(response):
+                    print("SUCCESSFULLY CANCELLED HOLDING PAYMENT. Response: \(response)")
+                case let .failure(error):
+                    print(error.localizedDescription)
+                }
+            }
     }
     
     func didTapRecurrent() {
-//        if let previousOrderId = storage.previoudOrderId {
-//            var params = createParams()
-//            params.order.previousInvoiceId = previousOrderId
-//            createRobokassa().startReccurentPayment(with: params) { result in
-//                switch result {
-//                case let .success(response):
-//                    print("SUCCESSFULLY FINISHED RECURRENT PAYMENT. Response: \(response)")
-//                case let .failure(error):
-//                    print(error.localizedDescription)
-//                }
-//            }
-//        } else {
-//            routeToWebView(with: .reccurentPayment)
-//        }
+        if let previousOrderId = storage.previoudOrderId {
+            var params = createParams()
+            params.order.previousInvoiceId = previousOrderId
+            createRobokassa().startReccurentPayment(with: params) { result in
+                switch result {
+                case let .success(response):
+                    print("SUCCESSFULLY FINISHED RECURRENT PAYMENT. Response: \(response)")
+                case let .failure(error):
+                    print(error.localizedDescription)
+                }
+            }
+        } else {
+            routeToWebView(with: .reccurentPayment)
+        }
     }
     
     func createRobokassa() -> RobokassaSDK.Robokassa {
-        Robokassa(
+        let robokassa = Robokassa(
             invoiceId: textField.text ?? "",
             login: RobokassaSDK.Constants.MERCHANT,
-            password: RobokassaSDK.Constants.PWD_2,
+            password: RobokassaSDK.Constants.PWD_1,
             password2: RobokassaSDK.Constants.PWD_2,
             isTesting: false
         )
+        robokassa.onDimissHandler = {
+            print("ROBOKASSA SDK DISMISSED")
+        }
+        robokassa.onSuccessHandler = { [weak self] in
+            self?.presentResult(title: "Success", message: "Successfully finished payment")
+        }
+        robokassa.onFailureHandler = { [weak self] reason in
+            self?.presentResult(title: "Failure", message: reason)
+        }
+        
+        return robokassa
     }
     
-//    func createParams() -> RobokassaSDK.PaymentParams {
-//        RobokassaSDK.PaymentParams(
-//            order: RobokassaSDK.OrderParams(
-//                invoiceId: Int(textField.text ?? "") ?? 0,
-//                orderSum: 1.0,
-//                description: "Test simple pay",
-//                expirationDate: Date().dateByAdding(.day, value: 1),
-//                receipt: .init(
-//                    items: [
-//                        .init(
-//                            name: "Ботинки детские",
-//                            sum: 1.0,
-//                            quantity: 1,
-//                            paymentMethod: .fullPayment,
-//                            tax: .NONE
-//                        )
-//                    ]
-//                )
-//            ),
-//            customer: .init(culture: .ru, email: "iammadj.u@gmail.com"),
-//            view: .init(toolbarText: "Простая оплата", hasToolbar: true)
-//        )
-//    }
+    func createParams() -> RobokassaSDK.PaymentParams {
+        RobokassaSDK.PaymentParams(
+            order: RobokassaSDK.OrderParams(
+                invoiceId: Int(textField.text ?? "") ?? 0,
+                orderSum: 1.0,
+                description: "Test simple pay",
+                expirationDate: Date().dateByAdding(.day, value: 1),
+                receipt: .init(
+                    items: [
+                        .init(
+                            name: "Ботинки детские",
+                            sum: 1.0,
+                            quantity: 1,
+                            paymentMethod: .fullPayment,
+                            tax: .NONE
+                        )
+                    ]
+                )
+            ),
+            customer: .init(culture: .ru, email: "iammadj.u@gmail.com"),
+            view: .init(toolbarText: "Простая оплата", hasToolbar: true)
+        )
+    }
+    
+    func presentResult(title: String?, message: String?) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let cancel = UIAlertAction(title: "Закрыть", style: .cancel)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(5)) {
+            alert.dismiss(animated: true)
+        }
+        
+        present(alert, animated: true)
+    }
 }
 
 // MARK: - Setup subviews -

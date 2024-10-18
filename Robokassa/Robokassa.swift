@@ -25,6 +25,10 @@ public final class Robokassa {
     private(set) var password2: String
     private(set) var isTesting: Bool
     
+    public var onDimissHandler: (() -> Void)?
+    public var onSuccessHandler: (() -> Void)?
+    public var onFailureHandler: ((String) -> Void)?
+    
     public init(invoiceId: String, login: String, password: String, password2: String, isTesting: Bool = false) {
         self.invoiceId = invoiceId
         self.login = login
@@ -192,6 +196,15 @@ fileprivate extension Robokassa {
             paymentType: paymentType,
             isTesting: isTesting
         )
+        webView.onDismissHandler = { [weak self] in
+            self?.onDimissHandler?()
+        }
+        webView.onSucccessHandler = { [weak self] in
+            self?.onSuccessHandler?()
+        }
+        webView.onFailureHandler = { [weak self] reason in
+            self?.onFailureHandler?(reason)
+        }
         
         if UIApplication.shared.topViewController()?.navigationController == nil {
             let navController = UINavigationController(rootViewController: webView)
